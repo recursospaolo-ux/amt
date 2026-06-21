@@ -56,6 +56,16 @@ export default async function PanelLayout({
             Ventas
           </Link>
         )}
+        {(esDueno || p.inventario) && (
+          <Link className="block hover:text-green-200" href="/catalogo-web">
+            Catálogo web
+          </Link>
+        )}
+        {(esDueno || p.ventas) && (
+          <Link className="block hover:text-green-200" href="/mensajes">
+            Mensajes
+          </Link>
+        )}
         {esDueno && (
           <Link className="block hover:text-green-200 mt-4" href="/solicitudes">
             Solicitudes
