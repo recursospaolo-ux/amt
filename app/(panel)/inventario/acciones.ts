@@ -34,3 +34,20 @@ export async function crearMovimiento(formData: FormData) {
   if (error) throw new Error("No se pudo registrar el movimiento: " + error.message);
   revalidatePath("/inventario");
 }
+
+export async function eliminarMovimiento(id: string) {
+  const { supabase } = await ctx();
+  const { error } = await supabase.from("inventario_movimientos").delete().eq("id", id);
+  if (error) throw new Error("No se pudo eliminar: " + error.message);
+  revalidatePath("/inventario");
+}
+
+export async function eliminarProducto(id: string) {
+  const { supabase } = await ctx();
+  const { error } = await supabase.from("productos").delete().eq("id", id);
+  if (error)
+    throw new Error(
+      "No se pudo eliminar (puede tener movimientos o ventas): " + error.message
+    );
+  revalidatePath("/inventario");
+}

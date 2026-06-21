@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { soles, kg, fecha } from "@/lib/format";
-import { crearLote } from "./acciones";
+import { crearLote, eliminarLote } from "./acciones";
+import { Eliminar } from "../_components/eliminar";
 
 export default async function Acopio() {
   const supabase = await createClient();
@@ -21,12 +22,20 @@ export default async function Acopio() {
           <h1 className="text-3xl font-bold text-gray-900">Compras y Acopio</h1>
           <p className="text-gray-500 mt-1">Registro de compras de cacao</p>
         </div>
-        <Link
-          href="/acopio/productores"
-          className="text-sm bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded-lg px-4 py-2"
-        >
-          Productores
-        </Link>
+        <div className="flex gap-2">
+          <a
+            href="/api/export/compras"
+            className="text-sm border border-[#8a5a2c] text-[#8a5a2c] rounded-lg px-4 py-2 hover:bg-[#efe7db]"
+          >
+            Exportar Excel
+          </a>
+          <Link
+            href="/acopio/productores"
+            className="text-sm bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded-lg px-4 py-2"
+          >
+            Productores
+          </Link>
+        </div>
       </div>
 
       <section className="bg-white border border-gray-200 rounded-xl p-4">
@@ -115,9 +124,15 @@ export default async function Acopio() {
                         </span>
                       </td>
                       <td className="p-2">
-                        <Link href={`/acopio/${l.id}`} className="text-[#8a5a2c] underline">
-                          Ver
-                        </Link>
+                        <div className="flex items-center gap-3">
+                          <Link href={`/acopio/${l.id}`} className="text-[#8a5a2c] underline">
+                            Ver
+                          </Link>
+                          <Eliminar
+                            action={eliminarLote.bind(null, l.id)}
+                            mensaje="¿Eliminar este lote? Se quitará también su stock del inventario."
+                          />
+                        </div>
                       </td>
                     </tr>
                   );

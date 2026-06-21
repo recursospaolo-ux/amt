@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 export async function crearCliente(formData: FormData) {
@@ -52,4 +53,40 @@ export async function registrarVenta(payload: {
   revalidatePath("/caja");
   revalidatePath("/inventario");
   return { ok: true };
+}
+
+export async function eliminarVenta(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("eliminar_venta", { p_venta: id });
+  if (error) throw new Error("No se pudo eliminar la venta: " + error.message);
+  revalidatePath("/ventas");
+  revalidatePath("/caja");
+  revalidatePath("/inventario");
+}
+
+export async function actualizarCliente(id: string, formData: FormData) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("clientes")
+    .update({
+      nombre: String(formData.get("nombre") || "").trim(),
+      doc: String(formData.get("doc") || "").trim() || null,
+      tipo: String(formData.get("tipo") || "local"),
+      pais: String(formData.get("pais") || "").trim() || null,
+      contacto: String(formData.get("contacto") || "").trim() || null,
+    })
+    .eq("id", id);
+  if (error) throw new Error("No se pudo actualizar: " + error.message);
+  revalidatePath("/ventas/clientes");
+  redirect("/ventas/clientes");
+}
+
+export async function eliminarCliente(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("clientes").delete().eq("id", id);
+  if (error)
+    throw new Error(
+      "No se pudo eliminar (puede tener ventas registradas): " + error.message
+    );
+  revalidatePath("/ventas/clientes");
 }

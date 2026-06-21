@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { kg, fecha } from "@/lib/format";
-import { crearProducto, crearMovimiento } from "./acciones";
+import { crearProducto, crearMovimiento, eliminarMovimiento } from "./acciones";
+import { Eliminar } from "../_components/eliminar";
 
 export default async function Inventario() {
   const supabase = await createClient();
@@ -14,7 +15,7 @@ export default async function Inventario() {
     .order("nombre");
   const { data: movimientos } = await supabase
     .from("inventario_movimientos")
-    .select("tipo, cantidad, motivo, fecha, productos(nombre)")
+    .select("id, tipo, cantidad, motivo, fecha, productos(nombre)")
     .order("creado_en", { ascending: false })
     .limit(20);
 
@@ -123,6 +124,7 @@ export default async function Inventario() {
                   <th className="p-2">Tipo</th>
                   <th className="p-2">Cantidad</th>
                   <th className="p-2">Motivo</th>
+                  <th className="p-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -135,6 +137,12 @@ export default async function Inventario() {
                       <td className="p-2">{m.tipo}</td>
                       <td className="p-2">{kg(m.cantidad)}</td>
                       <td className="p-2">{m.motivo ?? "—"}</td>
+                      <td className="p-2 text-right">
+                        <Eliminar
+                          action={eliminarMovimiento.bind(null, m.id)}
+                          mensaje="¿Eliminar este movimiento de inventario?"
+                        />
+                      </td>
                     </tr>
                   );
                 })}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { crearProductor } from "../acciones";
+import { crearProductor, eliminarProductor } from "../acciones";
+import { Eliminar } from "../../_components/eliminar";
 
 export default async function Productores() {
   const supabase = await createClient();
@@ -63,6 +64,7 @@ export default async function Productores() {
                   <th className="p-2">Zona</th>
                   <th className="p-2">Teléfono</th>
                   <th className="p-2">Orgánico</th>
+                  <th className="p-2">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,6 +75,20 @@ export default async function Productores() {
                     <td className="p-2">{p.zona ?? "—"}</td>
                     <td className="p-2">{p.telefono ?? "—"}</td>
                     <td className="p-2">{p.organico ? "Sí" : "No"}</td>
+                    <td className="p-2">
+                      <div className="flex items-center gap-3">
+                        <Link
+                          href={`/acopio/productores/${p.id}/editar`}
+                          className="text-[#8a5a2c] underline"
+                        >
+                          Editar
+                        </Link>
+                        <Eliminar
+                          action={eliminarProductor.bind(null, p.id)}
+                          mensaje="¿Eliminar este productor?"
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

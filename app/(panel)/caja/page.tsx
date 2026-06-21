@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { soles, fecha } from "@/lib/format";
-import { crearMovimientoCaja } from "./acciones";
+import { crearMovimientoCaja, eliminarMovimientoCaja } from "./acciones";
+import { Eliminar } from "../_components/eliminar";
 
 const CATEGORIAS = [
   "venta",
@@ -15,7 +16,7 @@ export default async function Caja() {
   const supabase = await createClient();
   const { data: movimientos } = await supabase
     .from("caja_movimientos")
-    .select("tipo, categoria, monto, descripcion, fecha")
+    .select("id, tipo, categoria, monto, descripcion, fecha")
     .order("creado_en", { ascending: false });
 
   const saldo = (movimientos ?? []).reduce(
@@ -31,7 +32,15 @@ export default async function Caja() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900">Caja</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900">Caja</h1>
+        <a
+          href="/api/export/caja"
+          className="text-sm border border-[#8a5a2c] text-[#8a5a2c] rounded-lg px-4 py-2 hover:bg-[#efe7db]"
+        >
+          Exportar Excel
+        </a>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white border border-gray-200 rounded-xl p-4">
@@ -94,6 +103,7 @@ export default async function Caja() {
                   <th className="p-2">Categoría</th>
                   <th className="p-2">Descripción</th>
                   <th className="p-2 text-right">Monto</th>
+                  <th className="p-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -109,6 +119,12 @@ export default async function Caja() {
                     <td className="p-2">{m.descripcion ?? "—"}</td>
                     <td className="p-2 text-right font-medium">
                       {m.tipo === "ingreso" ? "+" : "−"} {soles(m.monto)}
+                    </td>
+                    <td className="p-2 text-right">
+                      <Eliminar
+                        action={eliminarMovimientoCaja.bind(null, m.id)}
+                        mensaje="¿Eliminar este movimiento de caja?"
+                      />
                     </td>
                   </tr>
                 ))}

@@ -17,3 +17,10 @@ export async function crearMovimientoCaja(formData: FormData) {
   if (error) throw new Error("No se pudo registrar el movimiento: " + error.message);
   revalidatePath("/caja");
 }
+
+export async function eliminarMovimientoCaja(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("caja_movimientos").delete().eq("id", id);
+  if (error) throw new Error("No se pudo eliminar: " + error.message);
+  revalidatePath("/caja");
+}

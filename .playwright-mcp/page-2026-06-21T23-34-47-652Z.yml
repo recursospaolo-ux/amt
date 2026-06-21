@@ -1,0 +1,37 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e6]:
+      - heading "AMT Agroindustria" [level=1] [ref=e7]
+      - paragraph [ref=e8]: Sistema de Acopio de Cacao
+      - paragraph [ref=e9]: Ucayali, Perú
+    - generic [ref=e11]:
+      - heading "Crear Cuenta" [level=2] [ref=e12]
+      - paragraph [ref=e13]: Registrate para acceder. Tu solicitud quedará pendiente de aprobación.
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: Nombre completo
+          - textbox [ref=e17]
+        - generic [ref=e18]:
+          - generic [ref=e19]: DNI
+          - textbox "Documento de identidad" [ref=e20]
+        - generic [ref=e21]:
+          - generic [ref=e22]: ¿Eres proveedor o trabajador?
+          - combobox [ref=e23]:
+            - option "Seleccioná una opción" [disabled] [selected]
+            - option "Proveedor (entrego cacao)"
+            - option "Trabajador (personal de AMT)"
+        - generic [ref=e24]:
+          - generic [ref=e25]: Correo Electrónico
+          - textbox "tucorreo@ejemplo.com" [ref=e26]
+        - generic [ref=e27]:
+          - generic [ref=e28]: Contraseña
+          - generic [ref=e29]:
+            - textbox "Mínimo 6 caracteres" [ref=e30]
+            - button "Ver contraseña" [ref=e31]:
+              - img [ref=e32]
+        - button "Registrarme" [ref=e35]
+      - paragraph [ref=e36]:
+        - text: ¿Ya tenés cuenta?
+        - link "Iniciar sesión" [ref=e37] [cursor=pointer]:
+          - /url: /login
+  - alert [ref=e38]

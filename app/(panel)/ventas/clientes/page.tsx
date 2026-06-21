@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { crearCliente } from "../acciones";
+import { crearCliente, eliminarCliente } from "../acciones";
+import { Eliminar } from "../../_components/eliminar";
 
 export default async function Clientes() {
   const supabase = await createClient();
@@ -66,6 +67,7 @@ export default async function Clientes() {
                   <th className="p-2">Tipo</th>
                   <th className="p-2">País</th>
                   <th className="p-2">Contacto</th>
+                  <th className="p-2">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -76,6 +78,20 @@ export default async function Clientes() {
                     <td className="p-2">{c.tipo}</td>
                     <td className="p-2">{c.pais ?? "—"}</td>
                     <td className="p-2">{c.contacto ?? "—"}</td>
+                    <td className="p-2">
+                      <div className="flex items-center gap-3">
+                        <Link
+                          href={`/ventas/clientes/${c.id}/editar`}
+                          className="text-[#8a5a2c] underline"
+                        >
+                          Editar
+                        </Link>
+                        <Eliminar
+                          action={eliminarCliente.bind(null, c.id)}
+                          mensaje="¿Eliminar este cliente?"
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

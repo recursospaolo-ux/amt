@@ -89,3 +89,39 @@ export async function clasificarLote(loteId: string, formData: FormData) {
   revalidatePath(`/acopio/${loteId}`);
   revalidatePath("/inventario");
 }
+
+export async function actualizarProductor(id: string, formData: FormData) {
+  const { supabase } = await usuarioActual();
+  const { error } = await supabase
+    .from("productores")
+    .update({
+      nombre: String(formData.get("nombre") || "").trim(),
+      dni: String(formData.get("dni") || "").trim() || null,
+      zona: String(formData.get("zona") || "").trim() || null,
+      telefono: String(formData.get("telefono") || "").trim() || null,
+      organico: formData.get("organico") === "on",
+    })
+    .eq("id", id);
+  if (error) throw new Error("No se pudo actualizar: " + error.message);
+  revalidatePath("/acopio/productores");
+  redirect("/acopio/productores");
+}
+
+export async function eliminarProductor(id: string) {
+  const { supabase } = await usuarioActual();
+  const { error } = await supabase.from("productores").delete().eq("id", id);
+  if (error)
+    throw new Error(
+      "No se pudo eliminar (puede tener lotes registrados): " + error.message
+    );
+  revalidatePath("/acopio/productores");
+}
+
+export async function eliminarLote(id: string) {
+  const { supabase } = await usuarioActual();
+  const { error } = await supabase.rpc("eliminar_lote", { p_lote: id });
+  if (error) throw new Error("No se pudo eliminar el lote: " + error.message);
+  revalidatePath("/acopio");
+  revalidatePath("/inventario");
+  redirect("/acopio");
+}

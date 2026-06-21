@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { soles, fecha } from "@/lib/format";
 import { VentaForm } from "./VentaForm";
+import { eliminarVenta } from "./acciones";
+import { Eliminar } from "../_components/eliminar";
 
 export default async function Ventas() {
   const supabase = await createClient();
@@ -23,9 +25,20 @@ export default async function Ventas() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Ventas</h1>
-        <Link href="/ventas/clientes" className="text-sm bg-[#8a5a2c] text-white rounded px-3 py-1">
-          Clientes
-        </Link>
+        <div className="flex gap-2">
+          <a
+            href="/api/export/ventas"
+            className="text-sm border border-[#8a5a2c] text-[#8a5a2c] rounded-lg px-4 py-2 hover:bg-[#efe7db]"
+          >
+            Exportar Excel
+          </a>
+          <Link
+            href="/ventas/clientes"
+            className="text-sm bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded-lg px-4 py-2"
+          >
+            Clientes
+          </Link>
+        </div>
       </div>
 
       <section className="bg-white border border-gray-200 rounded-xl p-4">
@@ -48,6 +61,7 @@ export default async function Ventas() {
                   <th className="p-2">Tipo</th>
                   <th className="p-2">Estado</th>
                   <th className="p-2 text-right">Total</th>
+                  <th className="p-2"></th>
                 </tr>
               </thead>
               <tbody>
@@ -65,6 +79,12 @@ export default async function Ventas() {
                         </span>
                       </td>
                       <td className="p-2 text-right font-medium">{soles(v.total)}</td>
+                      <td className="p-2 text-right">
+                        <Eliminar
+                          action={eliminarVenta.bind(null, v.id)}
+                          mensaje="¿Eliminar esta venta? Se devolverá el stock y se quitará el ingreso de caja."
+                        />
+                      </td>
                     </tr>
                   );
                 })}
