@@ -22,13 +22,13 @@ export default async function Ventas() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Ventas</h1>
-        <Link href="/ventas/clientes" className="text-sm bg-green-700 text-white rounded px-3 py-1">
+        <h1 className="text-3xl font-bold text-gray-900">Ventas</h1>
+        <Link href="/ventas/clientes" className="text-sm bg-[#8a5a2c] text-white rounded px-3 py-1">
           Clientes
         </Link>
       </div>
 
-      <section className="bg-white border rounded-lg p-4">
+      <section className="bg-white border border-gray-200 rounded-xl p-4">
         <h2 className="font-medium mb-3">Nueva venta</h2>
         <VentaForm clientes={clientes ?? []} productos={productos ?? []} />
       </section>
@@ -38,9 +38,9 @@ export default async function Ventas() {
         {!ventas || ventas.length === 0 ? (
           <p className="text-sm text-gray-600">Aún no hay ventas.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border rounded-lg">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-100 text-left">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                   <th className="p-2">Código</th>
                   <th className="p-2">Fecha</th>
@@ -60,7 +60,7 @@ export default async function Ventas() {
                       <td className="p-2">{c?.nombre ?? "—"}</td>
                       <td className="p-2">{v.tipo}</td>
                       <td className="p-2">
-                        <span className="rounded bg-green-100 text-green-800 px-2 py-0.5 text-xs">
+                        <span className="rounded bg-[#efe7db] text-[#8a5a2c] px-2 py-0.5 text-xs">
                           {v.estado}
                         </span>
                       </td>

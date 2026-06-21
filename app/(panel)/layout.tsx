@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { CerrarSesion } from "./_components/cerrar-sesion";
+import { Sidebar } from "./_components/nav";
 import type { Permisos } from "@/lib/types";
 
 export default async function PanelLayout({
@@ -23,59 +22,23 @@ export default async function PanelLayout({
 
   if (!perfil || perfil.estado !== "activo") redirect("/pendiente");
 
-  const p = perfil.permisos as Permisos;
-  const esDueno = perfil.rol === "dueno";
-
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-56 bg-green-900 text-white p-4 flex flex-col gap-2">
-        <div className="font-bold text-lg mb-1">AMT Agroindustria</div>
-        <div className="text-xs text-green-300 mb-4">
-          {perfil.nombre || user.email} {esDueno && "· Dueño"}
-        </div>
-        <Link className="block hover:text-green-200" href="/inicio">
-          Inicio
-        </Link>
-        {(esDueno || p.acopio) && (
-          <Link className="block hover:text-green-200" href="/acopio">
-            Acopio
-          </Link>
-        )}
-        {(esDueno || p.inventario) && (
-          <Link className="block hover:text-green-200" href="/inventario">
-            Inventario
-          </Link>
-        )}
-        {(esDueno || p.caja) && (
-          <Link className="block hover:text-green-200" href="/caja">
-            Caja
-          </Link>
-        )}
-        {(esDueno || p.ventas) && (
-          <Link className="block hover:text-green-200" href="/ventas">
-            Ventas
-          </Link>
-        )}
-        {(esDueno || p.inventario) && (
-          <Link className="block hover:text-green-200" href="/catalogo-web">
-            Catálogo web
-          </Link>
-        )}
-        {(esDueno || p.ventas) && (
-          <Link className="block hover:text-green-200" href="/mensajes">
-            Mensajes
-          </Link>
-        )}
-        {esDueno && (
-          <Link className="block hover:text-green-200 mt-4" href="/solicitudes">
-            Solicitudes
-          </Link>
-        )}
-        <div className="mt-auto pt-4 border-t border-green-800">
-          <CerrarSesion />
-        </div>
-      </aside>
-      <main className="flex-1 p-6 bg-gray-50">{children}</main>
+    <div className="flex min-h-screen bg-[#faf9f7]">
+      <Sidebar
+        nombre={perfil.nombre || (user.email ?? "")}
+        correo={user.email ?? ""}
+        rol={perfil.rol}
+        permisos={perfil.permisos as Permisos}
+      />
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="flex justify-end items-center px-6 py-3 border-b border-gray-200 bg-white">
+          <span className="flex items-center gap-2 text-xs text-gray-600 bg-gray-100 rounded-full px-3 py-1">
+            <span className="w-2 h-2 rounded-full bg-green-500" />
+            En línea
+          </span>
+        </header>
+        <main className="flex-1 p-6">{children}</main>
+      </div>
     </div>
   );
 }

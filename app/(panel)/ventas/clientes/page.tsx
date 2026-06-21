@@ -12,13 +12,13 @@ export default async function Clientes() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Clientes</h1>
-        <Link href="/ventas" className="text-sm text-green-700 underline">
+        <h1 className="text-3xl font-bold text-gray-900">Clientes</h1>
+        <Link href="/ventas" className="text-sm text-[#8a5a2c] underline">
           ← Volver a ventas
         </Link>
       </div>
 
-      <section className="bg-white border rounded-lg p-4">
+      <section className="bg-white border border-gray-200 rounded-xl p-4">
         <h2 className="font-medium mb-3">Nuevo cliente</h2>
         <form action={crearCliente} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <label className="text-sm">
@@ -45,7 +45,7 @@ export default async function Clientes() {
             <input name="contacto" className="w-full border rounded p-2 mt-1" />
           </label>
           <div className="flex items-end">
-            <button className="bg-green-700 text-white rounded px-4 py-2 w-full">
+            <button className="bg-[#8a5a2c] text-white rounded px-4 py-2 w-full">
               Guardar cliente
             </button>
           </div>
@@ -57,9 +57,9 @@ export default async function Clientes() {
         {!clientes || clientes.length === 0 ? (
           <p className="text-sm text-gray-600">Aún no hay clientes.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border rounded-lg">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-100 text-left">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                   <th className="p-2">Nombre</th>
                   <th className="p-2">Doc</th>

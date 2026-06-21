@@ -8,22 +8,22 @@ export default function PublicoLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between p-4 border-b">
-        <Link href="/" className="font-bold text-green-900">
+        <Link href="/" className="font-bold text-[#7a4f28]">
           AMT Agroindustria
         </Link>
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/nosotros" className="hover:text-green-700">
+          <Link href="/nosotros" className="hover:text-[#8a5a2c]">
             Nosotros
           </Link>
-          <Link href="/catalogo" className="hover:text-green-700">
+          <Link href="/catalogo" className="hover:text-[#8a5a2c]">
             Catálogo
           </Link>
-          <Link href="/contacto" className="hover:text-green-700">
+          <Link href="/contacto" className="hover:text-[#8a5a2c]">
             Contacto
           </Link>
           <Link
             href="/login"
-            className="bg-green-700 text-white rounded px-3 py-1"
+            className="bg-[#8a5a2c] text-white rounded px-3 py-1"
           >
             Ingresar
           </Link>

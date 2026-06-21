@@ -68,7 +68,7 @@ export default function Login() {
                 onChange={(e) => setCorreo(e.target.value)}
                 required
                 placeholder="tucorreo@ejemplo.com"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#9a6a3c]/40 focus:border-[#9a6a3c]"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#8a5a2c]/40 focus:border-[#8a5a2c]"
               />
             </div>
             <div>
@@ -81,12 +81,12 @@ export default function Login() {
                 onChange={(e) => setClave(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#9a6a3c]/40 focus:border-[#9a6a3c]"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#8a5a2c]/40 focus:border-[#8a5a2c]"
               />
             </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
             <button
-              className="w-full bg-[#9a6a3c] hover:bg-[#80552c] text-white font-medium rounded-lg p-3 transition-colors disabled:opacity-60"
+              className="w-full bg-[#8a5a2c] hover:bg-[#6f4722] text-white font-medium rounded-lg p-3 transition-colors disabled:opacity-60"
               disabled={cargando}
             >
               {cargando ? "Ingresando..." : "Ingresar"}
@@ -95,7 +95,7 @@ export default function Login() {
 
           <p className="text-center text-sm text-gray-600 mt-6">
             ¿No tiene cuenta?{" "}
-            <Link href="/registro" className="text-[#9a6a3c] font-semibold hover:underline">
+            <Link href="/registro" className="text-[#8a5a2c] font-semibold hover:underline">
               Registrarse
             </Link>
           </p>

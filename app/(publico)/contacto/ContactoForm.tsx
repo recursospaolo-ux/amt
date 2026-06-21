@@ -27,7 +27,7 @@ export function ContactoForm() {
 
   if (estado === "ok") {
     return (
-      <p className="mt-4 text-green-700">
+      <p className="mt-4 text-[#8a5a2c]">
         ¡Gracias! Recibimos tu mensaje y te responderemos pronto.
       </p>
     );
@@ -62,7 +62,7 @@ export function ContactoForm() {
         <p className="text-red-600 text-sm">No se pudo enviar. Intentá de nuevo.</p>
       )}
       <button
-        className="bg-green-700 text-white rounded px-4 py-2 disabled:opacity-60"
+        className="bg-[#8a5a2c] text-white rounded px-4 py-2 disabled:opacity-60"
         disabled={estado === "enviando"}
       >
         {estado === "enviando" ? "Enviando..." : "Enviar mensaje"}

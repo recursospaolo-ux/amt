@@ -147,7 +147,7 @@ export function VentaForm({
         ))}
       </div>
 
-      <button type="button" onClick={agregarFila} className="text-sm text-green-700 underline">
+      <button type="button" onClick={agregarFila} className="text-sm text-[#8a5a2c] underline">
         + Agregar producto
       </button>
 
@@ -156,14 +156,14 @@ export function VentaForm({
           Total: {new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(total)}
         </span>
         <button
-          className="bg-green-700 text-white rounded px-4 py-2 disabled:opacity-60"
+          className="bg-[#8a5a2c] text-white rounded px-4 py-2 disabled:opacity-60"
           disabled={enviando}
         >
           {enviando ? "Registrando..." : "Registrar venta"}
         </button>
       </div>
       {error && <p className="text-red-600 text-sm">{error}</p>}
-      {ok && <p className="text-green-700 text-sm">✓ Venta registrada.</p>}
+      {ok && <p className="text-[#8a5a2c] text-sm">✓ Venta registrada.</p>}
     </form>
   );
 }

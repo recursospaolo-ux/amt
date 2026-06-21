@@ -35,12 +35,12 @@ export default async function LoteDetalle({
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <Link href="/acopio" className="text-sm text-green-700 underline">
+      <Link href="/acopio" className="text-sm text-[#8a5a2c] underline">
         ← Volver a acopio
       </Link>
 
-      <div className="bg-white border rounded-lg p-4">
-        <h1 className="text-2xl font-semibold font-mono">{lote.codigo}</h1>
+      <div className="bg-white border border-gray-200 rounded-xl p-4">
+        <h1 className="text-3xl font-bold text-gray-900 font-mono">{lote.codigo}</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3 text-sm">
           <div><span className="text-gray-500">Productor</span><br />{prod?.nombre ?? "—"}</div>
           <div><span className="text-gray-500">Fecha</span><br />{fecha(lote.fecha)}</div>
@@ -50,17 +50,17 @@ export default async function LoteDetalle({
           <div><span className="text-gray-500">Monto total</span><br />{soles(lote.monto_total)}</div>
           <div><span className="text-gray-500">Humedad</span><br />{lote.humedad ?? "—"}%</div>
           <div><span className="text-gray-500">Estado</span><br />
-            <span className="rounded bg-green-100 text-green-800 px-2 py-0.5 text-xs">{lote.estado}</span>
+            <span className="rounded bg-[#efe7db] text-[#8a5a2c] px-2 py-0.5 text-xs">{lote.estado}</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border rounded-lg p-4">
+      <div className="bg-white border border-gray-200 rounded-xl p-4">
         <h2 className="font-medium mb-3">Línea de tiempo</h2>
         <ol className="space-y-2 text-sm">
           {procesos?.map((p, i) => (
             <li key={i} className="flex gap-3">
-              <span className="text-green-700">●</span>
+              <span className="text-[#8a5a2c]">●</span>
               <div>
                 <span className="font-medium capitalize">{p.etapa}</span> — {fecha(p.fecha)}
                 {p.peso_resultante != null && <> · {kg(p.peso_resultante)}</>}
@@ -73,7 +73,7 @@ export default async function LoteDetalle({
       </div>
 
       {clasificado && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
+        <div className="bg-[#f6f1ea] border border-[#e6dccb] rounded-lg p-4 text-sm text-[#8a5a2c]">
           ✓ Lote clasificado. El grano ya entró al inventario.{" "}
           <Link href="/inventario" className="underline">Ver inventario</Link>
         </div>
@@ -88,7 +88,7 @@ export default async function LoteDetalle({
       {mostrarClasificar && (
         <form
           action={clasificarLote.bind(null, lote.id)}
-          className="bg-white border rounded-lg p-4 space-y-3"
+          className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
         >
           <h2 className="font-medium">Clasificar lote</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -105,7 +105,7 @@ export default async function LoteDetalle({
               <input name="merma" type="number" step="0.01" min="0" defaultValue="0" className="w-full border rounded p-2 mt-1" />
             </label>
           </div>
-          <button className="bg-green-700 text-white rounded px-4 py-2">
+          <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">
             Clasificar e ingresar a inventario
           </button>
         </form>
@@ -126,7 +126,7 @@ function EtapaForm({
   return (
     <form
       action={registrarEtapa.bind(null, loteId, etapa)}
-      className="bg-white border rounded-lg p-4 space-y-3"
+      className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
     >
       <h2 className="font-medium">{titulo}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -143,7 +143,7 @@ function EtapaForm({
         Observaciones
         <input name="observaciones" className="w-full border rounded p-2 mt-1" />
       </label>
-      <button className="bg-green-700 text-white rounded px-4 py-2">{titulo}</button>
+      <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">{titulo}</button>
     </form>
   );
 }

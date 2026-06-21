@@ -10,7 +10,7 @@ export default async function CatalogoWeb() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <h1 className="text-2xl font-semibold">Catálogo web</h1>
+      <h1 className="text-3xl font-bold text-gray-900">Catálogo web</h1>
       <p className="text-sm text-gray-600">
         Elegí qué productos se muestran en el sitio público, con su descripción y
         precio referencial.
@@ -20,7 +20,7 @@ export default async function CatalogoWeb() {
         <form
           key={p.id}
           action={guardarCatalogo.bind(null, p.id)}
-          className="bg-white border rounded-lg p-4 space-y-3"
+          className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -55,7 +55,7 @@ export default async function CatalogoWeb() {
                 className="w-full border rounded p-2 mt-1"
               />
             </label>
-            <button className="bg-green-700 text-white rounded px-4 py-2">Guardar</button>
+            <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">Guardar</button>
           </div>
         </form>
       ))}

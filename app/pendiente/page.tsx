@@ -9,7 +9,7 @@ export default function Pendiente() {
         ingresar al sistema.
       </p>
       <p className="mt-6 text-sm">
-        <Link href="/login" className="text-green-700 underline">
+        <Link href="/login" className="text-[#8a5a2c] underline">
           Volver a ingresar
         </Link>
       </p>

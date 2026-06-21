@@ -11,13 +11,13 @@ export default async function Solicitudes() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-4">Solicitudes de acceso</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-4">Solicitudes de acceso</h1>
       {(!pendientes || pendientes.length === 0) && (
         <p className="text-gray-600">No hay solicitudes pendientes.</p>
       )}
       <ul className="space-y-4">
         {pendientes?.map((u) => (
-          <li key={u.id} className="bg-white border rounded-lg p-4">
+          <li key={u.id} className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="font-medium">
               {u.nombre || "(sin nombre)"} — {u.correo}
             </p>
@@ -49,7 +49,7 @@ export default async function Solicitudes() {
                 <input type="checkbox" name="ventas" className="mr-1" />
                 Ventas
               </label>
-              <button className="bg-green-700 text-white rounded px-3 py-1 text-sm">
+              <button className="bg-[#8a5a2c] text-white rounded px-3 py-1 text-sm">
                 Aprobar
               </button>
             </form>

@@ -10,13 +10,13 @@ export default async function Mensajes() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Mensajes de contacto</h1>
+      <h1 className="text-3xl font-bold text-gray-900">Mensajes de contacto</h1>
       {!mensajes || mensajes.length === 0 ? (
         <p className="text-sm text-gray-600">No hay mensajes todavía.</p>
       ) : (
         <ul className="space-y-3">
           {mensajes.map((m, i) => (
-            <li key={i} className="bg-white border rounded-lg p-4">
+            <li key={i} className="bg-white border border-gray-200 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <span className="font-medium">{m.nombre || "(sin nombre)"}</span>
                 <span className="text-xs text-gray-500">{fecha(m.creado_en)}</span>
