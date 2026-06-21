@@ -2,11 +2,19 @@
 -- Tabla de perfiles de usuario, seguridad por fila (RLS) y trigger de alta.
 -- El PRIMER usuario que se registra se vuelve dueño (admin) automáticamente;
 -- los siguientes quedan en estado "pendiente" hasta que el dueño los apruebe.
+-- Versión idempotente: segura de ejecutar varias veces.
 
-create type rol_usuario as enum ('dueno', 'trabajador');
-create type estado_usuario as enum ('pendiente', 'activo', 'suspendido');
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'rol_usuario') then
+    create type rol_usuario as enum ('dueno', 'trabajador');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'estado_usuario') then
+    create type estado_usuario as enum ('pendiente', 'activo', 'suspendido');
+  end if;
+end $$;
 
-create table public.usuarios (
+create table if not exists public.usuarios (
   id uuid primary key references auth.users(id) on delete cascade,
   nombre text not null default '',
   correo text not null,
@@ -31,10 +39,12 @@ returns boolean language sql security definer stable set search_path = public as
 $$;
 
 -- Cada usuario lee su propia ficha; el dueño lee todas.
+drop policy if exists "leer propio o dueno" on public.usuarios;
 create policy "leer propio o dueno" on public.usuarios
   for select using (id = auth.uid() or public.es_dueno_activo());
 
 -- Solo el dueño actualiza fichas (aprobar / suspender / permisos).
+drop policy if exists "dueno actualiza" on public.usuarios;
 create policy "dueno actualiza" on public.usuarios
   for update using (public.es_dueno_activo());
 
@@ -60,6 +70,7 @@ begin
 end;
 $$;
 
+drop trigger if exists al_crear_usuario on auth.users;
 create trigger al_crear_usuario
   after insert on auth.users
   for each row execute function public.crear_perfil_usuario();
