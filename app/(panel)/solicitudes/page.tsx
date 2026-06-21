@@ -5,7 +5,7 @@ export default async function Solicitudes() {
   const supabase = await createClient();
   const { data: pendientes } = await supabase
     .from("usuarios")
-    .select("id, nombre, correo, creado_en")
+    .select("id, nombre, correo, dni, tipo, creado_en")
     .eq("estado", "pendiente")
     .order("creado_en");
 
@@ -20,6 +20,14 @@ export default async function Solicitudes() {
           <li key={u.id} className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="font-medium">
               {u.nombre || "(sin nombre)"} — {u.correo}
+            </p>
+            <p className="text-sm text-gray-500">
+              DNI: {u.dni || "—"}
+              {u.tipo && (
+                <span className="ml-2 rounded bg-[#efe7db] text-[#8a5a2c] px-2 py-0.5 text-xs capitalize">
+                  {u.tipo}
+                </span>
+              )}
             </p>
             <form
               action={async (formData: FormData) => {
