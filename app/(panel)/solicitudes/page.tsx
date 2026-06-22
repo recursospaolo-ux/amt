@@ -17,11 +17,11 @@ export default async function Solicitudes() {
       )}
       <ul className="space-y-4">
         {pendientes?.map((u) => (
-          <li key={u.id} className="bg-white border border-gray-200 rounded-xl p-4">
+          <li key={u.id} className="bg-white border border-gray-200 rounded-2xl p-4">
             <p className="font-medium">
               {u.nombre || "(sin nombre)"} — {u.correo}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-600">
               DNI: {u.dni || "—"}
               {u.tipo && (
                 <span className="ml-2 rounded bg-[#efe7db] text-[#8a5a2c] px-2 py-0.5 text-xs capitalize">
@@ -57,7 +57,7 @@ export default async function Solicitudes() {
                 <input type="checkbox" name="ventas" className="mr-1" />
                 Ventas
               </label>
-              <button className="bg-[#8a5a2c] text-white rounded px-3 py-1 text-sm">
+              <button className="bg-cacao-grad text-white rounded-full px-4 py-1.5 font-semibold text-sm">
                 Aprobar
               </button>
             </form>

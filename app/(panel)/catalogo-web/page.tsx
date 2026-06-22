@@ -20,13 +20,13 @@ export default async function CatalogoWeb() {
         <form
           key={p.id}
           action={guardarCatalogo.bind(null, p.id)}
-          className="bg-white border border-gray-200 rounded-xl p-4 space-y-3"
+          className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3"
         >
           <div className="flex items-center justify-between">
             <div>
               <span className="font-medium">{p.nombre}</span>
               {p.categoria && (
-                <span className="text-xs text-gray-500 ml-2">{p.categoria}</span>
+                <span className="text-xs text-gray-600 ml-2">{p.categoria}</span>
               )}
             </div>
             <label className="text-sm flex items-center gap-2">
@@ -55,7 +55,7 @@ export default async function CatalogoWeb() {
                 className="w-full border rounded p-2 mt-1"
               />
             </label>
-            <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">Guardar</button>
+            <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md">Guardar</button>
           </div>
         </form>
       ))}

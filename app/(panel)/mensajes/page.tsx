@@ -16,12 +16,12 @@ export default async function Mensajes() {
       ) : (
         <ul className="space-y-3">
           {mensajes.map((m, i) => (
-            <li key={i} className="bg-white border border-gray-200 rounded-xl p-4">
+            <li key={i} className="bg-white border border-gray-200 rounded-2xl p-4">
               <div className="flex items-center justify-between">
                 <span className="font-medium">{m.nombre || "(sin nombre)"}</span>
-                <span className="text-xs text-gray-500">{fecha(m.creado_en)}</span>
+                <span className="text-xs text-gray-600">{fecha(m.creado_en)}</span>
               </div>
-              <div className="text-sm text-gray-500">{m.correo}</div>
+              <div className="text-sm text-gray-600">{m.correo}</div>
               <p className="text-sm mt-2">{m.mensaje}</p>
             </li>
           ))}

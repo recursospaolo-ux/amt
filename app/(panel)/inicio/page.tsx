@@ -37,42 +37,46 @@ export default async function Dashboard() {
   const maxTipo = Math.max(1, ...porTipo.map((s) => Number(s.cantidad)));
 
   const tarjetas = [
-    { label: "KG acopiados (semana)", valor: kg(kgSemana), icon: ShoppingCart },
-    { label: "Inventario total", valor: kg(inventarioTotal), icon: Package },
-    { label: "Productores", valor: String(nProductores ?? 0), icon: Users },
-    { label: "Usuarios pendientes", valor: String(nPendientes ?? 0), icon: Clock },
+    { label: "KG acopiados (semana)", valor: kg(kgSemana), icon: ShoppingCart, grad: "linear-gradient(135deg,#8a5a2c,#b6803c)" },
+    { label: "Inventario total", valor: kg(inventarioTotal), icon: Package, grad: "linear-gradient(135deg,#c98a2a,#e0a32e)" },
+    { label: "Productores", valor: String(nProductores ?? 0), icon: Users, grad: "linear-gradient(135deg,#2f8f5b,#5bbd83)" },
+    { label: "Usuarios pendientes", valor: String(nPendientes ?? 0), icon: Clock, grad: "linear-gradient(135deg,#b5532a,#e07a3e)" },
   ];
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Resumen de AMT Agroindustria</p>
+        <p className="text-gray-600 mt-1">Resumen de AMT Agroindustria</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {tarjetas.map((t) => {
           const Icon = t.icon;
           return (
-            <div key={t.label} className="bg-white border border-gray-200 rounded-xl p-5">
+            <div
+              key={t.label}
+              className="rounded-2xl p-5 text-white shadow-md"
+              style={{ backgroundImage: t.grad }}
+            >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="text-xs uppercase tracking-wide text-gray-500">
+                  <div className="text-xs uppercase tracking-wide text-white/85">
                     {t.label}
                   </div>
-                  <div className="text-3xl font-bold text-[#8a5a2c] mt-2">{t.valor}</div>
+                  <div className="text-3xl font-extrabold mt-2">{t.valor}</div>
                 </div>
-                <Icon className="text-[#cdb393]" size={28} />
+                <Icon className="text-white/80" size={28} />
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6">
         <h2 className="font-semibold mb-4">Inventario por tipo</h2>
         {porTipo.length === 0 ? (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             Aún no hay stock. Registrá y clasificá lotes para verlo aquí.
           </p>
         ) : (
@@ -83,10 +87,10 @@ export default async function Dashboard() {
                   {new Intl.NumberFormat("es-PE").format(Number(s.cantidad))} kg
                 </div>
                 <div
-                  className="w-full bg-[#8a5a2c] rounded-t"
+                  className="w-full bg-cacao-grad rounded-t"
                   style={{ height: `${(Number(s.cantidad) / maxTipo) * 100}%` }}
                 />
-                <div className="text-xs text-gray-500 mt-2 text-center">{s.categoria}</div>
+                <div className="text-xs text-gray-600 mt-2 text-center">{s.categoria}</div>
               </div>
             ))}
           </div>
@@ -101,11 +105,11 @@ export default async function Dashboard() {
           </Link>
         </div>
         {!recientes || recientes.length === 0 ? (
-          <p className="text-sm text-gray-500">Aún no hay compras registradas.</p>
+          <p className="text-sm text-gray-600">Aún no hay compras registradas.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-3">Código</th>
                   <th className="p-3">Fecha</th>

@@ -62,7 +62,7 @@ export function ContactoForm() {
         <p className="text-red-600 text-sm">No se pudo enviar. Intentá de nuevo.</p>
       )}
       <button
-        className="bg-[#8a5a2c] text-white rounded px-4 py-2 disabled:opacity-60"
+        className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md disabled:opacity-60"
         disabled={estado === "enviando"}
       >
         {estado === "enviando" ? "Enviando..." : "Enviar mensaje"}

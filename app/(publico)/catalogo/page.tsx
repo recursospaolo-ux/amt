@@ -19,10 +19,10 @@ export default async function Catalogo() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {productos.map((p) => (
-            <article key={p.id} className="bg-white border border-gray-200 rounded-xl p-4">
+            <article key={p.id} className="bg-white border border-gray-200 rounded-2xl p-4">
               <h2 className="font-semibold text-[#7a4f28]">{p.nombre}</h2>
               {p.categoria && (
-                <div className="text-xs text-gray-500 mt-0.5">{p.categoria}</div>
+                <div className="text-xs text-gray-600 mt-0.5">{p.categoria}</div>
               )}
               {p.descripcion && (
                 <p className="text-sm text-gray-700 mt-2">{p.descripcion}</p>

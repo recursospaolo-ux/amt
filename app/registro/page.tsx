@@ -147,7 +147,7 @@ export default function Registro() {
                   type="button"
                   onClick={() => setVerClave((v) => !v)}
                   aria-label={verClave ? "Ocultar contraseña" : "Ver contraseña"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#8a5a2c]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-[#8a5a2c]"
                 >
                   {verClave ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -155,7 +155,7 @@ export default function Registro() {
             </div>
             {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
             <button
-              className="w-full bg-[#8a5a2c] hover:bg-[#6f4722] text-white font-semibold rounded-lg p-3 transition-colors disabled:opacity-60"
+              className="w-full bg-cacao-grad hover:brightness-110 text-white font-semibold rounded-full p-3 transition-colors disabled:opacity-60"
               disabled={cargando}
             >
               {cargando ? "Registrando..." : "Registrarme"}

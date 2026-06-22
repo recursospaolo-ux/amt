@@ -23,14 +23,14 @@ export default function PublicoLayout({
           </Link>
           <Link
             href="/login"
-            className="bg-[#8a5a2c] text-white rounded px-3 py-1"
+            className="bg-cacao-grad text-white rounded-full px-4 py-1.5 font-semibold"
           >
             Ingresar
           </Link>
         </nav>
       </header>
       <div className="flex-1">{children}</div>
-      <footer className="p-4 border-t text-center text-sm text-gray-500">
+      <footer className="p-4 border-t text-center text-sm text-gray-600">
         AMT Agroindustria S.A.C. — Aguaytía, Padre Abad, Ucayali, Perú
       </footer>
     </div>

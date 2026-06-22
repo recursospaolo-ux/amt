@@ -34,14 +34,14 @@ export default async function Ventas() {
           </a>
           <Link
             href="/ventas/clientes"
-            className="text-sm bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded-lg px-4 py-2"
+            className="text-sm bg-cacao-grad hover:brightness-110 text-white rounded-lg px-4 py-2"
           >
             Clientes
           </Link>
         </div>
       </div>
 
-      <section className="bg-white border border-gray-200 rounded-xl p-4">
+      <section className="bg-white border border-gray-200 rounded-2xl p-4">
         <h2 className="font-medium mb-3">Nueva venta</h2>
         <VentaForm clientes={clientes ?? []} productos={productos ?? []} />
       </section>
@@ -51,9 +51,9 @@ export default async function Ventas() {
         {!ventas || ventas.length === 0 ? (
           <p className="text-sm text-gray-600">Aún no hay ventas.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Código</th>
                   <th className="p-2">Fecha</th>

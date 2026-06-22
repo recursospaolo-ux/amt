@@ -156,7 +156,7 @@ export function VentaForm({
           Total: {new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(total)}
         </span>
         <button
-          className="bg-[#8a5a2c] text-white rounded px-4 py-2 disabled:opacity-60"
+          className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md disabled:opacity-60"
           disabled={enviando}
         >
           {enviando ? "Registrando..." : "Registrar venta"}

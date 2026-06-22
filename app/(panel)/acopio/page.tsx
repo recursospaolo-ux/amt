@@ -20,7 +20,7 @@ export default async function Acopio() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Compras y Acopio</h1>
-          <p className="text-gray-500 mt-1">Registro de compras de cacao</p>
+          <p className="text-gray-600 mt-1">Registro de compras de cacao</p>
         </div>
         <div className="flex gap-2">
           <a
@@ -31,14 +31,14 @@ export default async function Acopio() {
           </a>
           <Link
             href="/acopio/productores"
-            className="text-sm bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded-lg px-4 py-2"
+            className="text-sm bg-cacao-grad hover:brightness-110 text-white rounded-lg px-4 py-2"
           >
             Productores
           </Link>
         </div>
       </div>
 
-      <section className="bg-white border border-gray-200 rounded-xl p-4">
+      <section className="bg-white border border-gray-200 rounded-2xl p-4">
         <h2 className="font-medium mb-3">Nuevo acopio (compra de grano)</h2>
         {!productores || productores.length === 0 ? (
           <p className="text-sm text-gray-600">
@@ -80,7 +80,7 @@ export default async function Acopio() {
               <input name="precio_kg" type="number" step="0.01" min="0" required className="w-full border rounded p-2 mt-1" />
             </label>
             <div className="flex items-end">
-              <button className="bg-[#8a5a2c] text-white rounded px-4 py-2 w-full">
+              <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md w-full">
                 Registrar acopio
               </button>
             </div>
@@ -93,9 +93,9 @@ export default async function Acopio() {
         {!lotes || lotes.length === 0 ? (
           <p className="text-sm text-gray-600">Aún no hay lotes registrados.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Código</th>
                   <th className="p-2">Productor</th>

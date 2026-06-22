@@ -25,9 +25,9 @@ export default async function Inventario() {
 
       <section>
         <h2 className="font-medium mb-3">Stock actual</h2>
-        <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+        <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+            <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
               <tr>
                 <th className="p-2">Producto</th>
                 <th className="p-2">Categoría</th>
@@ -50,7 +50,7 @@ export default async function Inventario() {
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="bg-white border border-gray-200 rounded-xl p-4">
+        <section className="bg-white border border-gray-200 rounded-2xl p-4">
           <h2 className="font-medium mb-3">Nuevo movimiento</h2>
           <form action={crearMovimiento} className="space-y-3">
             <label className="text-sm block">
@@ -80,11 +80,11 @@ export default async function Inventario() {
               Motivo
               <input name="motivo" className="w-full border rounded p-2 mt-1" />
             </label>
-            <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">Registrar</button>
+            <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md">Registrar</button>
           </form>
         </section>
 
-        <section className="bg-white border border-gray-200 rounded-xl p-4">
+        <section className="bg-white border border-gray-200 rounded-2xl p-4">
           <h2 className="font-medium mb-3">Nuevo producto</h2>
           <form action={crearProducto} className="space-y-3">
             <label className="text-sm block">
@@ -105,7 +105,7 @@ export default async function Inventario() {
               <input name="es_para_venta" type="checkbox" defaultChecked />
               Se vende
             </label>
-            <button className="bg-[#8a5a2c] text-white rounded px-4 py-2">Crear producto</button>
+            <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md">Crear producto</button>
           </form>
         </section>
       </div>
@@ -115,9 +115,9 @@ export default async function Inventario() {
         {!movimientos || movimientos.length === 0 ? (
           <p className="text-sm text-gray-600">Sin movimientos todavía.</p>
         ) : (
-          <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl">
+          <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Fecha</th>
                   <th className="p-2">Producto</th>

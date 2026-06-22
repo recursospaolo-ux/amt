@@ -71,13 +71,13 @@ export function Sidebar({
           <div className="text-xl font-bold text-[#8a5a2c] leading-tight">
             AMT Agroindustria
           </div>
-          <div className="text-xs text-gray-500 mt-1">Sistema de Acopio</div>
+          <div className="text-xs text-gray-600 mt-1">Sistema de Acopio</div>
         </div>
         {onNavigate && (
           <button
             onClick={onNavigate}
             aria-label="Cerrar menú"
-            className="md:hidden text-gray-500 hover:text-gray-800"
+            className="md:hidden text-gray-600 hover:text-gray-800"
           >
             <X size={20} />
           </button>
@@ -96,8 +96,8 @@ export function Sidebar({
                 onClick={onNavigate}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                   i.active
-                    ? "bg-[#efe7db] text-[#8a5a2c] font-semibold"
-                    : "text-gray-700 hover:bg-gray-50"
+                    ? "bg-cacao-grad text-white font-semibold shadow-md"
+                    : "text-gray-700 hover:bg-[#f3ece1]"
                 }`}
               >
                 <Icon size={18} />
@@ -109,8 +109,8 @@ export function Sidebar({
 
       <div className="px-4 py-4 border-t border-gray-200">
         <div className="text-sm font-medium text-gray-900">{nombre}</div>
-        <div className="text-xs text-gray-500 truncate">{correo}</div>
-        <span className="inline-block mt-1.5 text-[10px] uppercase tracking-wide bg-[#8a5a2c] text-white rounded px-1.5 py-0.5">
+        <div className="text-xs text-gray-600 truncate">{correo}</div>
+        <span className="inline-block mt-1.5 text-[10px] uppercase tracking-wide bg-cacao-grad text-white rounded px-1.5 py-0.5">
           {esDueno ? "Admin" : "Trabajador"}
         </span>
         <button

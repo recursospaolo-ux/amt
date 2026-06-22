@@ -28,7 +28,7 @@ export default async function EditarCliente({
 
       <form
         action={actualizarCliente.bind(null, c.id)}
-        className="bg-white border border-gray-200 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-3"
+        className="bg-white border border-gray-200 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-3"
       >
         <label className="text-sm">
           Nombre / razón social
@@ -67,7 +67,7 @@ export default async function EditarCliente({
           />
         </label>
         <div className="flex items-end">
-          <button className="bg-[#8a5a2c] hover:bg-[#6f4722] text-white rounded px-4 py-2 w-full">
+          <button className="bg-cacao-grad hover:brightness-110 text-white rounded-full px-5 py-2.5 font-semibold shadow-md w-full">
             Guardar cambios
           </button>
         </div>
