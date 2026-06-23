@@ -141,5 +141,4 @@ export async function eliminarLote(id: string) {
   if (error) throw new Error("No se pudo eliminar el lote: " + error.message);
   revalidatePath("/acopio");
   revalidatePath("/inventario");
-  redirect("/acopio");
 }
