@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { soles, kg, fechaHora } from "@/lib/format";
 import { esDueno } from "@/lib/auth/esDueno";
-import { actualizarPermisos } from "../acciones";
+import { actualizarPermisos, eliminarTrabajador } from "../acciones";
+import { BorrarTrabajador } from "./BorrarTrabajador";
 
 const MODULOS = [
   { name: "acopio", label: "Compras y productores" },
@@ -185,6 +186,20 @@ export default async function TrabajadorDetalle({
           </div>
         )}
       </section>
+
+      {admin && t.rol === "trabajador" && (
+        <section className="border border-red-200 bg-red-50/50 rounded-2xl p-5">
+          <h2 className="font-semibold text-red-700">Zona de peligro</h2>
+          <p className="text-sm text-gray-600 mt-1 mb-4">
+            Eliminar la cuenta quita el acceso de este trabajador. El historial
+            de sus movimientos se conserva.
+          </p>
+          <BorrarTrabajador
+            action={eliminarTrabajador.bind(null, t.id)}
+            nombre={t.nombre || t.correo || "este trabajador"}
+          />
+        </section>
+      )}
     </div>
   );
 }
