@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Bell } from "lucide-react";
 import { Sidebar } from "./nav";
+import { NotificacionesRealtime } from "./NotificacionesRealtime";
 import type { Permisos } from "@/lib/types";
 
 export function Shell({
@@ -25,6 +26,7 @@ export function Shell({
 
   return (
     <div className="flex min-h-screen bg-[#faf9f7]">
+      {esDueno && <NotificacionesRealtime />}
       {/* Sidebar: cajón deslizante en móvil, fijo en escritorio */}
       <div
         className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:z-auto ${

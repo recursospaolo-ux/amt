@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 
@@ -11,6 +11,20 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "AMT Agroindustria",
   description: "Sistema de gestión de AMT Agroindustria S.A.C.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "AMT Agroindustria",
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#8a5a2c",
 };
 
 export default function RootLayout({
