@@ -14,7 +14,6 @@ import {
   Briefcase,
   BarChart3,
   LogOut,
-  X,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { Permisos } from "@/lib/types";
@@ -73,22 +72,11 @@ export function Sidebar({
 
   return (
     <aside className="w-64 h-full overflow-y-auto bg-white border-r border-gray-200 flex flex-col">
-      <div className="px-5 py-5 flex items-start justify-between">
-        <div>
-          <div className="text-xl font-bold text-[#8a5a2c] leading-tight">
-            AMT Agroindustria
-          </div>
-          <div className="text-xs text-gray-600 mt-1">Sistema de Acopio</div>
+      <div className="px-5 pt-16 pb-5 md:pt-5">
+        <div className="text-xl font-bold text-[#8a5a2c] leading-tight">
+          AMT Agroindustria
         </div>
-        {onNavigate && (
-          <button
-            onClick={onNavigate}
-            aria-label="Cerrar menú"
-            className="md:hidden text-gray-600 hover:text-gray-800"
-          >
-            <X size={20} />
-          </button>
-        )}
+        <div className="text-xs text-gray-600 mt-1">Sistema de Acopio</div>
       </div>
 
       <nav className="flex-1 px-3 space-y-1">

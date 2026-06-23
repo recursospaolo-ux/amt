@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Sidebar } from "./nav";
 import type { Permisos } from "@/lib/types";
 
@@ -25,8 +25,9 @@ export function Shell({
 
   return (
     <div className="flex min-h-screen bg-[#faf9f7]">
+      {/* Sidebar: cajón deslizante en móvil, fijo en escritorio */}
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-200 md:static md:translate-x-0 md:z-auto ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:z-auto ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -39,23 +40,28 @@ export function Shell({
         />
       </div>
 
+      {/* Fondo oscuro animado en móvil */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          className="fixed inset-0 bg-black/40 z-30 md:hidden animate-fade"
           onClick={() => setOpen(false)}
         />
       )}
 
       <div className="flex-1 flex flex-col min-w-0">
         <header className="flex items-center justify-between md:justify-end gap-3 px-4 md:px-6 py-3 border-b border-gray-200 bg-white">
-          <button
-            onClick={() => setOpen(true)}
-            aria-label="Abrir menú"
-            className="md:hidden text-gray-700"
-          >
-            <Menu size={24} />
-          </button>
-          <span className="md:hidden font-bold text-[#8a5a2c]">AMT Agroindustria</span>
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={() => setOpen((o) => !o)}
+              aria-label="Abrir o cerrar menú"
+              className="relative z-50 w-10 h-10 flex flex-col justify-center items-center gap-[5px]"
+            >
+              <span className={`block h-0.5 w-6 bg-gray-800 rounded transition-all duration-300 ${open ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-6 bg-gray-800 rounded transition-all duration-300 ${open ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 w-6 bg-gray-800 rounded transition-all duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""}`} />
+            </button>
+            <span className="font-bold text-[#8a5a2c]">AMT Agroindustria</span>
+          </div>
           <div className="flex items-center gap-4">
             {esDueno && (
               <Link

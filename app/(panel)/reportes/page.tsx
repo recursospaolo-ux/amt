@@ -160,7 +160,7 @@ export default async function Reportes({
           <p className="text-sm text-gray-600">Sin movimientos de dinero en este periodo.</p>
         ) : (
           <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[600px] text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-3">Fecha y hora</th>
@@ -197,7 +197,7 @@ export default async function Reportes({
           <p className="text-sm text-gray-600">Sin movimientos de cacao en este periodo.</p>
         ) : (
           <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[600px] text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-3">Fecha y hora</th>

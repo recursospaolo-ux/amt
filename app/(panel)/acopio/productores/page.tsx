@@ -56,7 +56,7 @@ export default async function Productores() {
           <p className="text-sm text-gray-600">Aún no hay productores.</p>
         ) : (
           <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[600px] text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Nombre</th>

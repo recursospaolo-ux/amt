@@ -23,9 +23,9 @@ export default async function Ventas() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-bold text-gray-900">Ventas</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <a
             href="/api/export/ventas"
             className="text-sm border border-[#8a5a2c] text-[#8a5a2c] rounded-lg px-4 py-2 hover:bg-[#efe7db]"
@@ -52,7 +52,7 @@ export default async function Ventas() {
           <p className="text-sm text-gray-600">Aún no hay ventas.</p>
         ) : (
           <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[600px] text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Código</th>
