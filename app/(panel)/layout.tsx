@@ -39,6 +39,12 @@ export default async function PanelLayout({
     notifCount = count ?? 0;
   }
 
+  const { count: chatUnread } = await supabase
+    .from("mensajes_chat")
+    .select("id", { count: "exact", head: true })
+    .eq("para", user.id)
+    .eq("leido", false);
+
   return (
     <Shell
       nombre={perfil.nombre || (user.email ?? "")}
@@ -46,6 +52,7 @@ export default async function PanelLayout({
       rol={perfil.rol}
       permisos={perfil.permisos as Permisos}
       notifCount={notifCount}
+      chatUnread={chatUnread ?? 0}
     >
       {children}
     </Shell>

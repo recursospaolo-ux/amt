@@ -12,6 +12,7 @@ export function Shell({
   rol,
   permisos,
   notifCount = 0,
+  chatUnread = 0,
   children,
 }: {
   nombre: string;
@@ -19,6 +20,7 @@ export function Shell({
   rol: string;
   permisos: Permisos;
   notifCount?: number;
+  chatUnread?: number;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -39,6 +41,7 @@ export function Shell({
           correo={correo}
           rol={rol}
           permisos={permisos}
+          chatUnread={chatUnread}
           onNavigate={() => setOpen(false)}
         />
       </div>

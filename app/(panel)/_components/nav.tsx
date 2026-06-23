@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Globe,
   MessageSquare,
+  MessageCircle,
   UserCheck,
   Briefcase,
   BarChart3,
@@ -25,12 +26,14 @@ export function Sidebar({
   correo,
   rol,
   permisos,
+  chatUnread = 0,
   onNavigate,
 }: {
   nombre: string;
   correo: string;
   rol: string;
   permisos: Permisos;
+  chatUnread?: number;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
@@ -58,6 +61,8 @@ export function Sidebar({
       active: pathname.startsWith("/reportes") },
     { href: "/catalogo-web", label: "Catálogo web", icon: Globe, show: esDueno || p.inventario,
       active: pathname.startsWith("/catalogo-web") },
+    { href: "/chat", label: "Chat", icon: MessageCircle, show: true,
+      active: pathname.startsWith("/chat"), badge: chatUnread },
     { href: "/mensajes", label: "Mensajes", icon: MessageSquare, show: esDueno || p.ventas,
       active: pathname.startsWith("/mensajes") },
     { href: "/equipo", label: "Equipo", icon: Briefcase, show: esDueno,
@@ -102,7 +107,12 @@ export function Sidebar({
                 }`}
               >
                 <Icon size={18} />
-                {i.label}
+                <span className="flex-1">{i.label}</span>
+                {(i as { badge?: number }).badge ? (
+                  <span className="bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center">
+                    {(i as { badge?: number }).badge! > 9 ? "9+" : (i as { badge?: number }).badge}
+                  </span>
+                ) : null}
               </Link>
             );
           })}
