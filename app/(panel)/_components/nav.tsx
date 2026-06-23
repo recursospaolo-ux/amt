@@ -12,6 +12,7 @@ import {
   MessageSquare,
   UserCheck,
   Briefcase,
+  BarChart3,
   LogOut,
   X,
 } from "lucide-react";
@@ -49,6 +50,9 @@ export function Sidebar({
       active: pathname.startsWith("/caja") },
     { href: "/ventas", label: "Ventas", icon: TrendingUp, show: esDueno || p.ventas,
       active: pathname === "/ventas" || pathname.startsWith("/ventas/") },
+    { href: "/reportes", label: "Reportes", icon: BarChart3,
+      show: esDueno || p.acopio || p.inventario || p.caja || p.ventas,
+      active: pathname.startsWith("/reportes") },
     { href: "/catalogo-web", label: "Catálogo web", icon: Globe, show: esDueno || p.inventario,
       active: pathname.startsWith("/catalogo-web") },
     { href: "/mensajes", label: "Mensajes", icon: MessageSquare, show: esDueno || p.ventas,
