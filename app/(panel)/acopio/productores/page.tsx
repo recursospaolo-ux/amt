@@ -2,9 +2,11 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { crearProductor, eliminarProductor } from "../acciones";
 import { Eliminar } from "../../_components/eliminar";
+import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Productores() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: productores } = await supabase
     .from("productores")
     .select("id, nombre, dni, zona, telefono, organico")
@@ -83,10 +85,12 @@ export default async function Productores() {
                         >
                           Editar
                         </Link>
-                        <Eliminar
-                          action={eliminarProductor.bind(null, p.id)}
-                          mensaje="¿Eliminar este productor?"
-                        />
+                        {admin && (
+                          <Eliminar
+                            action={eliminarProductor.bind(null, p.id)}
+                            mensaje="¿Eliminar este productor?"
+                          />
+                        )}
                       </div>
                     </td>
                   </tr>

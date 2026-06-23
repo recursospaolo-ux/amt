@@ -13,6 +13,7 @@ import {
   UserCheck,
   Briefcase,
   BarChart3,
+  History,
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -58,6 +59,8 @@ export function Sidebar({
       active: pathname.startsWith("/mensajes") },
     { href: "/equipo", label: "Equipo", icon: Briefcase, show: esDueno,
       active: pathname.startsWith("/equipo") },
+    { href: "/actividad", label: "Actividad", icon: History, show: esDueno,
+      active: pathname.startsWith("/actividad") },
     { href: "/solicitudes", label: "Aprobar Usuarios", icon: UserCheck, show: esDueno,
       active: pathname.startsWith("/solicitudes") },
   ];

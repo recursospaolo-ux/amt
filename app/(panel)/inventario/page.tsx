@@ -2,9 +2,11 @@ import { createClient } from "@/lib/supabase/server";
 import { kg, fechaHora } from "@/lib/format";
 import { crearProducto, crearMovimiento, eliminarMovimiento } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
+import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Inventario() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: stock } = await supabase
     .from("stock_actual")
     .select("producto_id, nombre, categoria, unidad, cantidad")
@@ -138,10 +140,12 @@ export default async function Inventario() {
                       <td className="p-2">{kg(m.cantidad)}</td>
                       <td className="p-2">{m.motivo ?? "—"}</td>
                       <td className="p-2 text-right">
-                        <Eliminar
-                          action={eliminarMovimiento.bind(null, m.id)}
-                          mensaje="¿Eliminar este movimiento de inventario?"
-                        />
+                        {admin && (
+                          <Eliminar
+                            action={eliminarMovimiento.bind(null, m.id)}
+                            mensaje="¿Eliminar este movimiento de inventario?"
+                          />
+                        )}
                       </td>
                     </tr>
                   );

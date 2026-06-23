@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { soles, fechaHora } from "@/lib/format";
 import { crearMovimientoCaja, eliminarMovimientoCaja } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
+import { esDueno } from "@/lib/auth/esDueno";
 
 const CATEGORIAS = [
   "aporte de capital",
@@ -16,6 +17,7 @@ const CATEGORIAS = [
 
 export default async function Caja() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: movimientos } = await supabase
     .from("caja_movimientos")
     .select("id, tipo, categoria, monto, descripcion, fecha, creado_en")
@@ -123,10 +125,12 @@ export default async function Caja() {
                       {m.tipo === "ingreso" ? "+" : "−"} {soles(m.monto)}
                     </td>
                     <td className="p-2 text-right">
-                      <Eliminar
-                        action={eliminarMovimientoCaja.bind(null, m.id)}
-                        mensaje="¿Eliminar este movimiento de caja?"
-                      />
+                      {admin && (
+                        <Eliminar
+                          action={eliminarMovimientoCaja.bind(null, m.id)}
+                          mensaje="¿Eliminar este movimiento de caja?"
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -2,9 +2,11 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { crearCliente, eliminarCliente } from "../acciones";
 import { Eliminar } from "../../_components/eliminar";
+import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Clientes() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: clientes } = await supabase
     .from("clientes")
     .select("id, nombre, doc, tipo, pais, contacto")
@@ -86,10 +88,12 @@ export default async function Clientes() {
                         >
                           Editar
                         </Link>
-                        <Eliminar
-                          action={eliminarCliente.bind(null, c.id)}
-                          mensaje="¿Eliminar este cliente?"
-                        />
+                        {admin && (
+                          <Eliminar
+                            action={eliminarCliente.bind(null, c.id)}
+                            mensaje="¿Eliminar este cliente?"
+                          />
+                        )}
                       </div>
                     </td>
                   </tr>

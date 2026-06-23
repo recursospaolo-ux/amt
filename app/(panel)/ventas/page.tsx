@@ -4,9 +4,11 @@ import { soles, fechaHora } from "@/lib/format";
 import { VentaForm } from "./VentaForm";
 import { eliminarVenta } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
+import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Ventas() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: clientes } = await supabase
     .from("clientes")
     .select("id, nombre")
@@ -80,10 +82,12 @@ export default async function Ventas() {
                       </td>
                       <td className="p-2 text-right font-medium">{soles(v.total)}</td>
                       <td className="p-2 text-right">
-                        <Eliminar
-                          action={eliminarVenta.bind(null, v.id)}
-                          mensaje="¿Eliminar esta venta? Se devolverá el stock y se quitará el ingreso de caja."
-                        />
+                        {admin && (
+                          <Eliminar
+                            action={eliminarVenta.bind(null, v.id)}
+                            mensaje="¿Eliminar esta venta? Se devolverá el stock y se quitará el ingreso de caja."
+                          />
+                        )}
                       </td>
                     </tr>
                   );

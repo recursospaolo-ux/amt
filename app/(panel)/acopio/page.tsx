@@ -4,9 +4,11 @@ import { soles, kg, fechaHora } from "@/lib/format";
 import { crearLote, eliminarLote } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
 import { SelectorProductor } from "./SelectorProductor";
+import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Acopio() {
   const supabase = await createClient();
+  const admin = await esDueno();
   const { data: productores } = await supabase
     .from("productores")
     .select("id, nombre, dni")
@@ -116,10 +118,12 @@ export default async function Acopio() {
                           <Link href={`/acopio/${l.id}`} className="text-[#8a5a2c] underline">
                             Ver
                           </Link>
-                          <Eliminar
-                            action={eliminarLote.bind(null, l.id)}
-                            mensaje="¿Eliminar este lote? Se quitará también su stock del inventario."
-                          />
+                          {admin && (
+                            <Eliminar
+                              action={eliminarLote.bind(null, l.id)}
+                              mensaje="¿Eliminar este lote? Se quitará también su stock del inventario."
+                            />
+                          )}
                         </div>
                       </td>
                     </tr>
