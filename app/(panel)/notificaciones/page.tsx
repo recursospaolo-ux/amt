@@ -2,6 +2,7 @@ import { ShoppingCart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { fechaHora } from "@/lib/format";
 import { MarcarLeidas } from "./MarcarLeidas";
+import { ActivarPush } from "./ActivarPush";
 
 export default async function Notificaciones() {
   const supabase = await createClient();
@@ -17,6 +18,7 @@ export default async function Notificaciones() {
     <div className="space-y-6 max-w-2xl">
       <MarcarLeidas hayNoLeidas={hayNoLeidas} />
       <h1 className="text-3xl font-bold text-gray-900">Notificaciones</h1>
+      <ActivarPush />
 
       {!notis || notis.length === 0 ? (
         <p className="text-gray-600">No hay notificaciones todavía.</p>
