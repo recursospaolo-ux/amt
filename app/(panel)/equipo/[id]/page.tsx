@@ -2,6 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { soles, kg, fechaHora } from "@/lib/format";
+import { esDueno } from "@/lib/auth/esDueno";
+import { actualizarPermisos } from "../acciones";
+
+const MODULOS = [
+  { name: "acopio", label: "Compras y productores" },
+  { name: "inventario", label: "Inventario" },
+  { name: "caja", label: "Dinero (caja)" },
+  { name: "ventas", label: "Ventas y clientes" },
+];
 
 export default async function TrabajadorDetalle({
   params,
@@ -10,13 +19,16 @@ export default async function TrabajadorDetalle({
 }) {
   const { id } = await params;
   const supabase = await createClient();
+  const admin = await esDueno();
 
   const { data: t } = await supabase
     .from("usuarios")
-    .select("id, nombre, correo, dni, tipo, estado")
+    .select("id, nombre, correo, dni, tipo, estado, rol, permisos")
     .eq("id", id)
     .single();
   if (!t) notFound();
+
+  const perm = (t.permisos ?? {}) as Record<string, boolean>;
 
   const [{ data: compras }, { data: movs }, { data: ventas }] = await Promise.all([
     supabase
@@ -69,6 +81,37 @@ export default async function TrabajadorDetalle({
           </div>
         ))}
       </div>
+
+      {admin && t.rol === "trabajador" && (
+        <section className="bg-white border border-gray-200 rounded-2xl p-5">
+          <h2 className="font-semibold">Permisos de acceso</h2>
+          <p className="text-sm text-gray-600 mt-1 mb-4">
+            Elegí a qué módulos puede entrar este trabajador. Borrar registros
+            siempre es solo tuyo.
+          </p>
+          <form action={actualizarPermisos.bind(null, t.id)} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {MODULOS.map((m) => (
+                <label
+                  key={m.name}
+                  className="flex items-center gap-3 text-sm border border-gray-200 rounded-xl p-3 cursor-pointer hover:bg-[#f7f1e8]"
+                >
+                  <input
+                    type="checkbox"
+                    name={m.name}
+                    defaultChecked={!!perm[m.name]}
+                    className="w-4 h-4 accent-[#8a5a2c]"
+                  />
+                  {m.label}
+                </label>
+              ))}
+            </div>
+            <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md">
+              Guardar permisos
+            </button>
+          </form>
+        </section>
+      )}
 
       <section>
         <h2 className="font-semibold mb-3">Historial de compras</h2>
