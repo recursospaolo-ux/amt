@@ -31,6 +31,8 @@ export async function POST(req: Request) {
     body: mensaje || "Nuevo movimiento",
   });
 
+  let ok = 0;
+  const errores: string[] = [];
   await Promise.all(
     (subs ?? []).map(async (s) => {
       try {
@@ -38,8 +40,10 @@ export async function POST(req: Request) {
           { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
           payload
         );
+        ok++;
       } catch (e) {
         const code = (e as { statusCode?: number })?.statusCode;
+        errores.push(String(code ?? (e as Error)?.message ?? "?"));
         if (code === 404 || code === 410) {
           await admin.from("push_subscriptions").delete().eq("id", s.id);
         }
@@ -47,5 +51,5 @@ export async function POST(req: Request) {
     })
   );
 
-  return new Response("ok");
+  return Response.json({ total: subs?.length ?? 0, ok, errores });
 }
