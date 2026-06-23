@@ -5,6 +5,7 @@ export const PERMISOS_VACIOS: Permisos = {
   inventario: false,
   caja: false,
   ventas: false,
+  pagos: false,
 };
 
 /** Solo los usuarios en estado "activo" pueden ingresar al panel. */

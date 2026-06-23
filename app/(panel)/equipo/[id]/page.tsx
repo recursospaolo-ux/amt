@@ -11,6 +11,7 @@ const MODULOS = [
   { name: "inventario", label: "Inventario" },
   { name: "caja", label: "Dinero (caja)" },
   { name: "ventas", label: "Ventas y clientes" },
+  { name: "pagos", label: "Cajero (confirmar pagos)" },
 ];
 
 export default async function TrabajadorDetalle({

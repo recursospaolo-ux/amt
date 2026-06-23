@@ -27,6 +27,7 @@ export async function actualizarPermisos(userId: string, formData: FormData) {
     inventario: formData.get("inventario") === "on",
     caja: formData.get("caja") === "on",
     ventas: formData.get("ventas") === "on",
+    pagos: formData.get("pagos") === "on",
   };
 
   const { error } = await supabase

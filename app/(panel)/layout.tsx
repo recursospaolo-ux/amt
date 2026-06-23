@@ -22,12 +22,20 @@ export default async function PanelLayout({
 
   if (!perfil || perfil.estado !== "activo") redirect("/pendiente");
 
+  const permisos = (perfil.permisos ?? {}) as Permisos;
   let notifCount = 0;
   if (perfil.rol === "dueno") {
     const { count } = await supabase
       .from("notificaciones")
       .select("id", { count: "exact", head: true })
       .eq("leida", false);
+    notifCount = count ?? 0;
+  } else if (permisos.pagos) {
+    const { count } = await supabase
+      .from("notificaciones")
+      .select("id", { count: "exact", head: true })
+      .eq("leida", false)
+      .eq("para", user.id);
     notifCount = count ?? 0;
   }
 

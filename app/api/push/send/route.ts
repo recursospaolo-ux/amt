@@ -8,9 +8,9 @@ export async function POST(req: Request) {
     return new Response("No autorizado", { status: 401 });
   }
 
-  const { mensaje } = await req
+  const { mensaje, para } = await req
     .json()
-    .catch(() => ({ mensaje: "Nuevo movimiento" }));
+    .catch(() => ({ mensaje: "Nuevo movimiento", para: null }));
 
   webpush.setVapidDetails(
     process.env.VAPID_SUBJECT || "mailto:admin@amtagroindustria.com",
@@ -22,9 +22,11 @@ export async function POST(req: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
-  const { data: subs } = await admin
+  let query = admin
     .from("push_subscriptions")
     .select("id, endpoint, p256dh, auth");
+  if (para) query = query.eq("user_id", para);
+  const { data: subs } = await query;
 
   const payload = JSON.stringify({
     title: "AMT Agroindustria",

@@ -37,6 +37,7 @@ export default async function Solicitudes() {
                   inventario: formData.get("inventario") === "on",
                   caja: formData.get("caja") === "on",
                   ventas: formData.get("ventas") === "on",
+                  pagos: formData.get("pagos") === "on",
                 });
               }}
               className="mt-3 flex flex-wrap items-center gap-4"
@@ -56,6 +57,10 @@ export default async function Solicitudes() {
               <label className="text-sm">
                 <input type="checkbox" name="ventas" defaultChecked className="mr-1" />
                 Ventas
+              </label>
+              <label className="text-sm">
+                <input type="checkbox" name="pagos" defaultChecked={u.tipo === "cajero"} className="mr-1" />
+                Cajero (pagos)
               </label>
               <button className="bg-cacao-grad text-white rounded-full px-4 py-1.5 font-semibold text-sm">
                 Aprobar

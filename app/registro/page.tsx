@@ -101,7 +101,7 @@ export default function Registro() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-800 mb-1">
-                ¿Eres proveedor o trabajador?
+                ¿Cuál es tu rol?
               </label>
               <select
                 value={tipo}
@@ -113,7 +113,8 @@ export default function Registro() {
                   Seleccioná una opción
                 </option>
                 <option value="proveedor">Proveedor (entrego cacao)</option>
-                <option value="trabajador">Trabajador (personal de AMT)</option>
+                <option value="trabajador">Trabajador (atiende / registra)</option>
+                <option value="cajero">Cajero/a (hace los pagos)</option>
               </select>
             </div>
             <div>

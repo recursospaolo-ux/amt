@@ -23,10 +23,11 @@ export function Shell({
 }) {
   const [open, setOpen] = useState(false);
   const esDueno = rol === "dueno";
+  const puedeNotif = esDueno || !!permisos?.pagos;
 
   return (
     <div className="flex min-h-screen bg-[#faf9f7]">
-      {esDueno && <NotificacionesRealtime />}
+      {puedeNotif && <NotificacionesRealtime />}
       {/* Sidebar: cajón deslizante en móvil, fijo en escritorio */}
       <div
         className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:z-auto ${
@@ -65,7 +66,7 @@ export function Shell({
             <span className="font-bold text-[#8a5a2c]">AMT Agroindustria</span>
           </div>
           <div className="flex items-center gap-4">
-            {esDueno && (
+            {puedeNotif && (
               <Link
                 href="/notificaciones"
                 aria-label="Notificaciones"
