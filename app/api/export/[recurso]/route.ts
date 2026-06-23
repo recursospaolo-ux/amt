@@ -14,6 +14,14 @@ function csv(rows: Record<string, unknown>[], cols: Col[]): string {
 }
 
 const fmtFecha = (s: unknown) => (s ? new Date(String(s)).toLocaleDateString("es-PE") : "");
+const fmtHora = (s: unknown) =>
+  s
+    ? new Date(String(s)).toLocaleString("es-PE", {
+        timeZone: "America/Lima",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
 
 export async function GET(
   req: Request,
@@ -43,12 +51,13 @@ export async function GET(
     const { data } = await conFechas(
       supabase
         .from("lotes_acopio")
-        .select("codigo, fecha, estado_recepcion, peso_kg, humedad, precio_kg, monto_total, estado, productores(nombre)")
+        .select("codigo, fecha, creado_en, estado_recepcion, peso_kg, humedad, precio_kg, monto_total, estado, productores(nombre)")
     ).order("fecha", { ascending: false });
     rows = data ?? [];
     cols = [
       { header: "Código", value: (r) => r.codigo },
       { header: "Fecha", value: (r) => fmtFecha(r.fecha) },
+      { header: "Hora", value: (r) => fmtHora(r.creado_en) },
       { header: "Proveedor", value: (r) => (r.productores as { nombre?: string } | null)?.nombre ?? "" },
       { header: "Recepción", value: (r) => r.estado_recepcion },
       { header: "Peso (kg)", value: (r) => r.peso_kg },
@@ -59,12 +68,13 @@ export async function GET(
     ];
   } else if (recurso === "ventas") {
     const { data } = await conFechas(
-      supabase.from("ventas").select("codigo, fecha, tipo, estado, total, clientes(nombre)")
+      supabase.from("ventas").select("codigo, fecha, creado_en, tipo, estado, total, clientes(nombre)")
     ).order("fecha", { ascending: false });
     rows = data ?? [];
     cols = [
       { header: "Código", value: (r) => r.codigo },
       { header: "Fecha", value: (r) => fmtFecha(r.fecha) },
+      { header: "Hora", value: (r) => fmtHora(r.creado_en) },
       { header: "Cliente", value: (r) => (r.clientes as { nombre?: string } | null)?.nombre ?? "" },
       { header: "Tipo", value: (r) => r.tipo },
       { header: "Estado", value: (r) => r.estado },
@@ -72,11 +82,12 @@ export async function GET(
     ];
   } else if (recurso === "caja") {
     const { data } = await conFechas(
-      supabase.from("caja_movimientos").select("fecha, tipo, categoria, descripcion, monto")
+      supabase.from("caja_movimientos").select("fecha, creado_en, tipo, categoria, descripcion, monto")
     ).order("fecha", { ascending: false });
     rows = data ?? [];
     cols = [
       { header: "Fecha", value: (r) => fmtFecha(r.fecha) },
+      { header: "Hora", value: (r) => fmtHora(r.creado_en) },
       { header: "Tipo", value: (r) => r.tipo },
       { header: "Categoría", value: (r) => r.categoria ?? "" },
       { header: "Descripción", value: (r) => r.descripcion ?? "" },
@@ -86,11 +97,12 @@ export async function GET(
     const { data } = await conFechas(
       supabase
         .from("inventario_movimientos")
-        .select("fecha, tipo, cantidad, motivo, productos(nombre)")
+        .select("fecha, creado_en, tipo, cantidad, motivo, productos(nombre)")
     ).order("fecha", { ascending: false });
     rows = data ?? [];
     cols = [
       { header: "Fecha", value: (r) => fmtFecha(r.fecha) },
+      { header: "Hora", value: (r) => fmtHora(r.creado_en) },
       { header: "Producto", value: (r) => (r.productos as { nombre?: string } | null)?.nombre ?? "" },
       { header: "Tipo", value: (r) => r.tipo },
       { header: "Cantidad (kg)", value: (r) => r.cantidad },

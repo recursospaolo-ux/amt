@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { kg, fecha } from "@/lib/format";
+import { kg, fechaHora } from "@/lib/format";
 import { crearProducto, crearMovimiento, eliminarMovimiento } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
 
@@ -15,7 +15,7 @@ export default async function Inventario() {
     .order("nombre");
   const { data: movimientos } = await supabase
     .from("inventario_movimientos")
-    .select("id, tipo, cantidad, motivo, fecha, productos(nombre)")
+    .select("id, tipo, cantidad, motivo, fecha, creado_en, productos(nombre)")
     .order("creado_en", { ascending: false })
     .limit(20);
 
@@ -119,7 +119,7 @@ export default async function Inventario() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-2">Fecha</th>
+                  <th className="p-2">Fecha y hora</th>
                   <th className="p-2">Producto</th>
                   <th className="p-2">Tipo</th>
                   <th className="p-2">Cantidad</th>
@@ -132,7 +132,7 @@ export default async function Inventario() {
                   const p = m.productos as { nombre?: string } | null;
                   return (
                     <tr key={i} className="border-t">
-                      <td className="p-2">{fecha(m.fecha)}</td>
+                      <td className="p-2">{fechaHora(m.creado_en)}</td>
                       <td className="p-2">{p?.nombre ?? "—"}</td>
                       <td className="p-2">{m.tipo}</td>
                       <td className="p-2">{kg(m.cantidad)}</td>

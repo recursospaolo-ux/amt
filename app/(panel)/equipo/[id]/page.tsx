@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { soles, kg, fecha } from "@/lib/format";
+import { soles, kg, fechaHora } from "@/lib/format";
 
 export default async function TrabajadorDetalle({
   params,
@@ -21,12 +21,12 @@ export default async function TrabajadorDetalle({
   const [{ data: compras }, { data: movs }, { data: ventas }] = await Promise.all([
     supabase
       .from("lotes_acopio")
-      .select("id, codigo, fecha, peso_kg, monto_total, estado_recepcion, productores(nombre)")
+      .select("id, codigo, fecha, creado_en, peso_kg, monto_total, estado_recepcion, productores(nombre)")
       .eq("creado_por", id)
       .order("creado_en", { ascending: false }),
     supabase
       .from("caja_movimientos")
-      .select("tipo, categoria, monto, descripcion, fecha")
+      .select("tipo, categoria, monto, descripcion, fecha, creado_en")
       .eq("creado_por", id)
       .order("creado_en", { ascending: false }),
     supabase
@@ -79,7 +79,7 @@ export default async function TrabajadorDetalle({
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-3">Fecha</th>
+                  <th className="p-3">Fecha y hora</th>
                   <th className="p-3">Código</th>
                   <th className="p-3">Proveedor</th>
                   <th className="p-3">Peso</th>
@@ -91,7 +91,7 @@ export default async function TrabajadorDetalle({
                   const prod = c.productores as { nombre?: string } | null;
                   return (
                     <tr key={c.id} className="border-t border-gray-100">
-                      <td className="p-3">{fecha(c.fecha)}</td>
+                      <td className="p-3">{fechaHora(c.creado_en)}</td>
                       <td className="p-3 font-mono">{c.codigo}</td>
                       <td className="p-3">{prod?.nombre ?? "—"}</td>
                       <td className="p-3">{kg(c.peso_kg)}</td>
@@ -114,7 +114,7 @@ export default async function TrabajadorDetalle({
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-3">Fecha</th>
+                  <th className="p-3">Fecha y hora</th>
                   <th className="p-3">Tipo</th>
                   <th className="p-3">Categoría</th>
                   <th className="p-3">Descripción</th>
@@ -124,7 +124,7 @@ export default async function TrabajadorDetalle({
               <tbody>
                 {movs.map((m, i) => (
                   <tr key={i} className="border-t border-gray-100">
-                    <td className="p-3">{fecha(m.fecha)}</td>
+                    <td className="p-3">{fechaHora(m.creado_en)}</td>
                     <td className="p-3">
                       <span className={m.tipo === "ingreso" ? "text-green-700" : "text-red-600"}>
                         {m.tipo}

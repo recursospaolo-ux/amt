@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { soles, fecha } from "@/lib/format";
+import { soles, fechaHora } from "@/lib/format";
 import { VentaForm } from "./VentaForm";
 import { eliminarVenta } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
@@ -18,7 +18,7 @@ export default async function Ventas() {
     .order("nombre");
   const { data: ventas } = await supabase
     .from("ventas")
-    .select("id, codigo, fecha, tipo, estado, total, clientes(nombre)")
+    .select("id, codigo, fecha, creado_en, tipo, estado, total, clientes(nombre)")
     .order("creado_en", { ascending: false });
 
   return (
@@ -56,7 +56,7 @@ export default async function Ventas() {
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
                   <th className="p-2">Código</th>
-                  <th className="p-2">Fecha</th>
+                  <th className="p-2">Fecha y hora</th>
                   <th className="p-2">Cliente</th>
                   <th className="p-2">Tipo</th>
                   <th className="p-2">Estado</th>
@@ -70,7 +70,7 @@ export default async function Ventas() {
                   return (
                     <tr key={v.id} className="border-t">
                       <td className="p-2 font-mono">{v.codigo}</td>
-                      <td className="p-2">{fecha(v.fecha)}</td>
+                      <td className="p-2">{fechaHora(v.creado_en)}</td>
                       <td className="p-2">{c?.nombre ?? "—"}</td>
                       <td className="p-2">{v.tipo}</td>
                       <td className="p-2">

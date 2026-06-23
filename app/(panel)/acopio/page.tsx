@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { soles, kg, fecha } from "@/lib/format";
+import { soles, kg, fechaHora } from "@/lib/format";
 import { crearLote, eliminarLote } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
 import { SelectorProductor } from "./SelectorProductor";
@@ -13,7 +13,7 @@ export default async function Acopio() {
     .order("nombre");
   const { data: lotes } = await supabase
     .from("lotes_acopio")
-    .select("id, codigo, fecha, estado_recepcion, peso_kg, monto_total, estado, productores(nombre)")
+    .select("id, codigo, fecha, creado_en, estado_recepcion, peso_kg, monto_total, estado, productores(nombre)")
     .order("creado_en", { ascending: false });
 
   return (
@@ -87,7 +87,7 @@ export default async function Acopio() {
                 <tr>
                   <th className="p-2">Código</th>
                   <th className="p-2">Productor</th>
-                  <th className="p-2">Fecha</th>
+                  <th className="p-2">Fecha y hora</th>
                   <th className="p-2">Recepción</th>
                   <th className="p-2">Peso</th>
                   <th className="p-2">Monto</th>
@@ -102,7 +102,7 @@ export default async function Acopio() {
                     <tr key={l.id} className="border-t">
                       <td className="p-2 font-mono">{l.codigo}</td>
                       <td className="p-2">{prod?.nombre ?? "—"}</td>
-                      <td className="p-2">{fecha(l.fecha)}</td>
+                      <td className="p-2">{fechaHora(l.creado_en)}</td>
                       <td className="p-2">{l.estado_recepcion}</td>
                       <td className="p-2">{kg(l.peso_kg)}</td>
                       <td className="p-2">{soles(l.monto_total)}</td>

@@ -1,6 +1,7 @@
 import { ArrowDownToLine, ArrowUpFromLine, Wallet, Package } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { soles, kg, fecha } from "@/lib/format";
+import Link from "next/link";
+import { soles, kg, fecha, fechaHora } from "@/lib/format";
 
 export default async function Reportes({
   searchParams,
@@ -8,22 +9,34 @@ export default async function Reportes({
   searchParams: Promise<{ desde?: string; hasta?: string }>;
 }) {
   const sp = await searchParams;
-  const hoy = new Date().toISOString().slice(0, 10);
+  // Fechas calculadas en zona horaria de Perú
+  const hoy = new Date().toLocaleDateString("en-CA", { timeZone: "America/Lima" });
+  const base = new Date(hoy + "T00:00:00");
+  const lunes = new Date(base);
+  lunes.setDate(base.getDate() - ((base.getDay() + 6) % 7));
+  const inicioSemana = lunes.toISOString().slice(0, 10);
+  const inicioMes = hoy.slice(0, 8) + "01";
   const desde = sp.desde || hoy;
   const hasta = sp.hasta || hoy;
+
+  const rangos = [
+    { label: "Hoy", d: hoy, h: hoy },
+    { label: "Esta semana", d: inicioSemana, h: hoy },
+    { label: "Este mes", d: inicioMes, h: hoy },
+  ];
 
   const supabase = await createClient();
   const [{ data: caja }, { data: inv }, { data: compras }, { data: ventas }] =
     await Promise.all([
       supabase
         .from("caja_movimientos")
-        .select("fecha, tipo, categoria, descripcion, monto")
+        .select("fecha, creado_en, tipo, categoria, descripcion, monto")
         .gte("fecha", desde)
         .lte("fecha", hasta)
         .order("creado_en", { ascending: false }),
       supabase
         .from("inventario_movimientos")
-        .select("fecha, tipo, cantidad, motivo, productos(nombre)")
+        .select("fecha, creado_en, tipo, cantidad, motivo, productos(nombre)")
         .gte("fecha", desde)
         .lte("fecha", hasta)
         .order("creado_en", { ascending: false }),
@@ -74,7 +87,27 @@ export default async function Reportes({
         </p>
       </div>
 
-      {/* Filtro de fechas */}
+      {/* Rangos rápidos */}
+      <div className="flex flex-wrap gap-2">
+        {rangos.map((r) => {
+          const activo = desde === r.d && hasta === r.h;
+          return (
+            <Link
+              key={r.label}
+              href={`/reportes?desde=${r.d}&hasta=${r.h}`}
+              className={`text-sm rounded-full px-4 py-2 font-semibold ${
+                activo
+                  ? "bg-cacao-grad text-white shadow-md"
+                  : "border border-[#8a5a2c] text-[#8a5a2c] hover:bg-[#efe7db]"
+              }`}
+            >
+              {r.label}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Filtro por fecha y hora personalizado */}
       <form method="get" className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-wrap items-end gap-3">
         <label className="text-sm">
           Desde
@@ -130,7 +163,7 @@ export default async function Reportes({
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-3">Fecha</th>
+                  <th className="p-3">Fecha y hora</th>
                   <th className="p-3">Tipo</th>
                   <th className="p-3">Categoría</th>
                   <th className="p-3">Descripción</th>
@@ -140,7 +173,7 @@ export default async function Reportes({
               <tbody>
                 {caja.map((m, i) => (
                   <tr key={i} className="border-t border-gray-100">
-                    <td className="p-3">{fecha(m.fecha)}</td>
+                    <td className="p-3">{fechaHora(m.creado_en)}</td>
                     <td className="p-3">
                       <span className={m.tipo === "ingreso" ? "text-green-700" : "text-red-600"}>{m.tipo}</span>
                     </td>
@@ -167,7 +200,7 @@ export default async function Reportes({
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-3">Fecha</th>
+                  <th className="p-3">Fecha y hora</th>
                   <th className="p-3">Producto</th>
                   <th className="p-3">Tipo</th>
                   <th className="p-3 text-right">Cantidad</th>
@@ -179,7 +212,7 @@ export default async function Reportes({
                   const p = m.productos as { nombre?: string } | null;
                   return (
                     <tr key={i} className="border-t border-gray-100">
-                      <td className="p-3">{fecha(m.fecha)}</td>
+                      <td className="p-3">{fechaHora(m.creado_en)}</td>
                       <td className="p-3">{p?.nombre ?? "—"}</td>
                       <td className="p-3">{m.tipo}</td>
                       <td className="p-3 text-right">{kg(m.cantidad)}</td>

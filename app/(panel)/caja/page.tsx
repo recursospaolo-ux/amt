@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { soles, fecha } from "@/lib/format";
+import { soles, fechaHora } from "@/lib/format";
 import { crearMovimientoCaja, eliminarMovimientoCaja } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
 
@@ -18,7 +18,7 @@ export default async function Caja() {
   const supabase = await createClient();
   const { data: movimientos } = await supabase
     .from("caja_movimientos")
-    .select("id, tipo, categoria, monto, descripcion, fecha")
+    .select("id, tipo, categoria, monto, descripcion, fecha, creado_en")
     .order("creado_en", { ascending: false });
 
   const saldo = (movimientos ?? []).reduce(
@@ -100,7 +100,7 @@ export default async function Caja() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
                 <tr>
-                  <th className="p-2">Fecha</th>
+                  <th className="p-2">Fecha y hora</th>
                   <th className="p-2">Tipo</th>
                   <th className="p-2">Categoría</th>
                   <th className="p-2">Descripción</th>
@@ -111,7 +111,7 @@ export default async function Caja() {
               <tbody>
                 {movimientos.map((m, i) => (
                   <tr key={i} className="border-t">
-                    <td className="p-2">{fecha(m.fecha)}</td>
+                    <td className="p-2">{fechaHora(m.creado_en)}</td>
                     <td className="p-2">
                       <span className={m.tipo === "ingreso" ? "text-[#8a5a2c]" : "text-red-600"}>
                         {m.tipo}

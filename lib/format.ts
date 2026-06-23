@@ -15,3 +15,16 @@ export function fecha(s: string | null | undefined): string {
   if (!s) return "—";
   return new Date(s).toLocaleDateString("es-PE");
 }
+
+// Fecha y hora en zona horaria de Perú (para timestamps con hora exacta).
+export function fechaHora(s: string | null | undefined): string {
+  if (!s) return "—";
+  return new Date(s).toLocaleString("es-PE", {
+    timeZone: "America/Lima",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

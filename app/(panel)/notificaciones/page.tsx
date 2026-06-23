@@ -1,6 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { fecha } from "@/lib/format";
+import { fechaHora } from "@/lib/format";
 import { MarcarLeidas } from "./MarcarLeidas";
 
 export default async function Notificaciones() {
@@ -37,7 +37,7 @@ export default async function Notificaciones() {
               </span>
               <div>
                 <p className="text-sm text-gray-800">{n.mensaje}</p>
-                <p className="text-xs text-gray-500 mt-1">{fecha(n.creado_en)}</p>
+                <p className="text-xs text-gray-500 mt-1">{fechaHora(n.creado_en)}</p>
               </div>
             </li>
           ))}
