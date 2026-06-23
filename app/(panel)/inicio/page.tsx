@@ -16,6 +16,7 @@ export default async function Dashboard() {
     { count: nProductores },
     { count: nPendientes },
     { data: recientes },
+    { data: caja },
   ] = await Promise.all([
     supabase.from("lotes_acopio").select("peso_kg").gte("fecha", desde),
     supabase.from("stock_actual").select("categoria, cantidad"),
@@ -29,8 +30,19 @@ export default async function Dashboard() {
       .select("codigo, fecha, estado_recepcion, peso_kg, monto_total, productores(nombre)")
       .order("creado_en", { ascending: false })
       .limit(5),
+    supabase.from("caja_movimientos").select("tipo, monto"),
   ]);
 
+  const saldo = (caja ?? []).reduce(
+    (a, m) => a + (m.tipo === "ingreso" ? Number(m.monto) : -Number(m.monto)),
+    0
+  );
+  const ingresos = (caja ?? [])
+    .filter((m) => m.tipo === "ingreso")
+    .reduce((a, m) => a + Number(m.monto), 0);
+  const egresos = (caja ?? [])
+    .filter((m) => m.tipo === "egreso")
+    .reduce((a, m) => a + Number(m.monto), 0);
   const kgSemana = (lotesSemana ?? []).reduce((a, l) => a + Number(l.peso_kg), 0);
   const inventarioTotal = (stock ?? []).reduce((a, s) => a + Number(s.cantidad), 0);
   const porTipo = (stock ?? []).filter((s) => Number(s.cantidad) > 0);
@@ -48,6 +60,25 @@ export default async function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600 mt-1">Resumen de AMT Agroindustria</p>
+      </div>
+
+      <div
+        className="rounded-2xl p-6 text-white shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        style={{ backgroundImage: "linear-gradient(135deg,#5f3a18,#8a5a2c,#c98a2a)" }}
+      >
+        <div>
+          <div className="text-sm uppercase tracking-wide text-white/85">Saldo en caja</div>
+          <div className="text-4xl font-extrabold mt-1">{soles(saldo)}</div>
+          <div className="text-xs text-white/80 mt-2">
+            Ingresos {soles(ingresos)} · Egresos {soles(egresos)}
+          </div>
+        </div>
+        <Link
+          href="/caja"
+          className="self-start bg-white/20 hover:bg-white/30 transition-colors text-white font-semibold rounded-full px-5 py-2.5"
+        >
+          Gestionar dinero →
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

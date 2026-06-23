@@ -4,9 +4,11 @@ import { crearMovimientoCaja, eliminarMovimientoCaja } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
 
 const CATEGORIAS = [
+  "aporte de capital",
   "venta",
   "compra cacao",
   "pago productor",
+  "servicio externo",
   "gasto operativo",
   "sueldo",
   "otro",
@@ -33,7 +35,7 @@ export default async function Caja() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Caja</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Dinero</h1>
         <a
           href="/api/export/caja"
           className="text-sm border border-[#8a5a2c] text-[#8a5a2c] rounded-lg px-4 py-2 hover:bg-[#efe7db]"

@@ -3,12 +3,13 @@ import { createClient } from "@/lib/supabase/server";
 import { soles, kg, fecha } from "@/lib/format";
 import { crearLote, eliminarLote } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
+import { SelectorProductor } from "./SelectorProductor";
 
 export default async function Acopio() {
   const supabase = await createClient();
   const { data: productores } = await supabase
     .from("productores")
-    .select("id, nombre")
+    .select("id, nombre, dni")
     .order("nombre");
   const { data: lotes } = await supabase
     .from("lotes_acopio")
@@ -39,26 +40,14 @@ export default async function Acopio() {
       </div>
 
       <section className="bg-white border border-gray-200 rounded-2xl p-4">
-        <h2 className="font-medium mb-3">Nuevo acopio (compra de grano)</h2>
-        {!productores || productores.length === 0 ? (
-          <p className="text-sm text-gray-600">
-            Primero registrá un{" "}
-            <Link href="/acopio/productores" className="text-[#8a5a2c] underline">
-              productor
-            </Link>
-            .
-          </p>
-        ) : (
-          <form action={crearLote} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label className="text-sm">
-              Productor
-              <select name="productor_id" required className="w-full border rounded p-2 mt-1">
-                {productores.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nombre}
-                  </option>
-                ))}
-              </select>
+        <h2 className="font-medium mb-1">Nueva compra de cacao</h2>
+        <p className="text-xs text-gray-600 mb-3">
+          El monto se descuenta automáticamente de la caja.
+        </p>
+        <form action={crearLote} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label className="text-sm sm:col-span-2">
+              Proveedor
+              <SelectorProductor productores={productores ?? []} />
             </label>
             <label className="text-sm">
               Estado de recepción
@@ -81,11 +70,10 @@ export default async function Acopio() {
             </label>
             <div className="flex items-end">
               <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md w-full">
-                Registrar acopio
+                Registrar compra
               </button>
             </div>
-          </form>
-        )}
+        </form>
       </section>
 
       <section>

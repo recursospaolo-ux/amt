@@ -11,6 +11,7 @@ import {
   Globe,
   MessageSquare,
   UserCheck,
+  Briefcase,
   LogOut,
   X,
 } from "lucide-react";
@@ -44,7 +45,7 @@ export function Sidebar({
       active: pathname.startsWith("/acopio/productores") },
     { href: "/inventario", label: "Inventario", icon: Package, show: esDueno || p.inventario,
       active: pathname.startsWith("/inventario") },
-    { href: "/caja", label: "Caja", icon: Wallet, show: esDueno || p.caja,
+    { href: "/caja", label: "Dinero", icon: Wallet, show: esDueno || p.caja,
       active: pathname.startsWith("/caja") },
     { href: "/ventas", label: "Ventas", icon: TrendingUp, show: esDueno || p.ventas,
       active: pathname === "/ventas" || pathname.startsWith("/ventas/") },
@@ -52,6 +53,8 @@ export function Sidebar({
       active: pathname.startsWith("/catalogo-web") },
     { href: "/mensajes", label: "Mensajes", icon: MessageSquare, show: esDueno || p.ventas,
       active: pathname.startsWith("/mensajes") },
+    { href: "/equipo", label: "Equipo", icon: Briefcase, show: esDueno,
+      active: pathname.startsWith("/equipo") },
     { href: "/solicitudes", label: "Aprobar Usuarios", icon: UserCheck, show: esDueno,
       active: pathname.startsWith("/solicitudes") },
   ];

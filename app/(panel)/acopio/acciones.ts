@@ -29,11 +29,29 @@ export async function crearLote(formData: FormData) {
   const { supabase, userId } = await usuarioActual();
   const peso = Number(formData.get("peso_kg"));
   const codigo = "L-" + Date.now().toString(36).toUpperCase();
+
+  // Proveedor: existente o nuevo (creado al vuelo).
+  let productorId = String(formData.get("productor_id") || "").trim();
+  if (!productorId) {
+    const nuevoNombre = String(formData.get("nuevo_nombre") || "").trim();
+    if (!nuevoNombre) throw new Error("Indicá el proveedor (elegí uno o creá uno nuevo).");
+    const { data: np, error: ep } = await supabase
+      .from("productores")
+      .insert({
+        nombre: nuevoNombre,
+        dni: String(formData.get("nuevo_dni") || "").trim() || null,
+      })
+      .select("id")
+      .single();
+    if (ep) throw new Error("No se pudo crear el proveedor: " + ep.message);
+    productorId = np.id;
+  }
+
   const { data, error } = await supabase
     .from("lotes_acopio")
     .insert({
       codigo,
-      productor_id: String(formData.get("productor_id")),
+      productor_id: productorId,
       estado_recepcion: String(formData.get("estado_recepcion")),
       peso_kg: peso,
       humedad: formData.get("humedad") ? Number(formData.get("humedad")) : null,

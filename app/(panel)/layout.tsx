@@ -22,12 +22,22 @@ export default async function PanelLayout({
 
   if (!perfil || perfil.estado !== "activo") redirect("/pendiente");
 
+  let notifCount = 0;
+  if (perfil.rol === "dueno") {
+    const { count } = await supabase
+      .from("notificaciones")
+      .select("id", { count: "exact", head: true })
+      .eq("leida", false);
+    notifCount = count ?? 0;
+  }
+
   return (
     <Shell
       nombre={perfil.nombre || (user.email ?? "")}
       correo={user.email ?? ""}
       rol={perfil.rol}
       permisos={perfil.permisos as Permisos}
+      notifCount={notifCount}
     >
       {children}
     </Shell>

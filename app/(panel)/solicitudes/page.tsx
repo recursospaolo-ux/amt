@@ -42,19 +42,19 @@ export default async function Solicitudes() {
               className="mt-3 flex flex-wrap items-center gap-4"
             >
               <label className="text-sm">
-                <input type="checkbox" name="acopio" className="mr-1" />
+                <input type="checkbox" name="acopio" defaultChecked className="mr-1" />
                 Acopio
               </label>
               <label className="text-sm">
-                <input type="checkbox" name="inventario" className="mr-1" />
+                <input type="checkbox" name="inventario" defaultChecked className="mr-1" />
                 Inventario
               </label>
               <label className="text-sm">
-                <input type="checkbox" name="caja" className="mr-1" />
+                <input type="checkbox" name="caja" defaultChecked className="mr-1" />
                 Caja
               </label>
               <label className="text-sm">
-                <input type="checkbox" name="ventas" className="mr-1" />
+                <input type="checkbox" name="ventas" defaultChecked className="mr-1" />
                 Ventas
               </label>
               <button className="bg-cacao-grad text-white rounded-full px-4 py-1.5 font-semibold text-sm">
