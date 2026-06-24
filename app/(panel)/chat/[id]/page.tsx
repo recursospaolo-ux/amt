@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { Conversacion } from "./Conversacion";
+import { MenuConversacion } from "./MenuConversacion";
 
 type Contacto = { id: string; nombre: string; rol: string };
 
@@ -25,12 +26,16 @@ export default async function ChatThread({
 
   const { data: mensajes } = await supabase
     .from("mensajes_chat")
-    .select("id, de, para, texto, imagen_url, creado_en")
+    .select("id, de, para, texto, imagen_url, eliminado_todos, oculto_para, creado_en")
     .or(
       `and(de.eq.${user.id},para.eq.${otherId}),and(de.eq.${otherId},para.eq.${user.id})`
     )
     .order("creado_en", { ascending: true })
     .limit(300);
+
+  const visibles = ((mensajes ?? []) as { oculto_para?: string[] }[]).filter(
+    (m) => !(m.oculto_para ?? []).includes(user.id)
+  );
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -44,13 +49,14 @@ export default async function ChatThread({
         >
           {(otro.nombre || "?").charAt(0).toUpperCase()}
         </span>
-        <div>
+        <div className="flex-1">
           <div className="font-semibold text-gray-900 leading-tight">{otro.nombre}</div>
           <div className="text-xs text-gray-500">{otro.rol === "dueno" ? "Administrador" : "Equipo"}</div>
         </div>
+        <MenuConversacion otherId={otherId} />
       </div>
 
-      <Conversacion meId={user.id} otherId={otherId} initial={(mensajes ?? []) as never} />
+      <Conversacion meId={user.id} otherId={otherId} initial={visibles as never} />
     </div>
   );
 }

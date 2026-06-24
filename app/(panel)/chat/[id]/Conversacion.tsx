@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ImagePlus, Send } from "lucide-react";
+import { ImagePlus, Send, MoreVertical } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { fechaHora } from "@/lib/format";
 
@@ -12,6 +12,8 @@ type Msg = {
   para: string;
   texto: string | null;
   imagen_url: string | null;
+  eliminado_todos?: boolean;
+  oculto_para?: string[];
   creado_en: string;
 };
 
@@ -29,6 +31,7 @@ export function Conversacion({
   const [mensajes, setMensajes] = useState<Msg[]>(initial);
   const [texto, setTexto] = useState("");
   const [subiendo, setSubiendo] = useState(false);
+  const [menuId, setMenuId] = useState<string | null>(null);
   const finRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,23 +48,31 @@ export function Conversacion({
     router.refresh();
   }
 
+  function aplicar(m: Msg) {
+    setMensajes((prev) => {
+      if ((m.oculto_para ?? []).includes(meId)) return prev.filter((x) => x.id !== m.id);
+      if (prev.some((x) => x.id === m.id)) return prev.map((x) => (x.id === m.id ? m : x));
+      return [...prev, m];
+    });
+  }
+
   useEffect(() => {
     marcarLeido();
+    const enConv = (m: Msg) =>
+      (m.de === otherId && m.para === meId) || (m.de === meId && m.para === otherId);
     const canal = supabase
       .channel(`chat-${meId}-${otherId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "mensajes_chat" },
-        (payload) => {
-          const m = payload.new as Msg;
-          const enEstaConversacion =
-            (m.de === otherId && m.para === meId) ||
-            (m.de === meId && m.para === otherId);
-          if (!enEstaConversacion) return;
-          setMensajes((prev) => (prev.some((x) => x.id === m.id) ? prev : [...prev, m]));
-          if (m.de === otherId) marcarLeido();
-        }
-      )
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "mensajes_chat" }, (p) => {
+        const m = p.new as Msg;
+        if (!enConv(m)) return;
+        aplicar(m);
+        if (m.de === otherId) marcarLeido();
+      })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "mensajes_chat" }, (p) => {
+        const m = p.new as Msg;
+        if (!enConv(m)) return;
+        aplicar(m);
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(canal);
@@ -83,7 +94,7 @@ export function Conversacion({
       setTexto(t);
       return;
     }
-    setMensajes((prev) => (prev.some((x) => x.id === data.id) ? prev : [...prev, data as Msg]));
+    aplicar(data as Msg);
   }
 
   async function subirFoto(file: File) {
@@ -107,37 +118,79 @@ export function Conversacion({
       alert("No se pudo enviar la foto: " + error.message);
       return;
     }
-    setMensajes((prev) => (prev.some((x) => x.id === data.id) ? prev : [...prev, data as Msg]));
+    aplicar(data as Msg);
+  }
+
+  async function eliminarParaMi(id: string) {
+    setMenuId(null);
+    setMensajes((prev) => prev.filter((x) => x.id !== id));
+    await supabase.rpc("chat_eliminar_para_mi", { p_msg: id });
+  }
+
+  async function eliminarParaTodos(id: string) {
+    setMenuId(null);
+    setMensajes((prev) =>
+      prev.map((x) => (x.id === id ? { ...x, eliminado_todos: true, texto: null, imagen_url: null } : x))
+    );
+    const { error } = await supabase.rpc("chat_eliminar_para_todos", { p_msg: id });
+    if (error) alert("No se pudo eliminar: " + error.message);
   }
 
   return (
     <div className="flex flex-col h-[calc(100vh-9rem)]">
       <div className="flex-1 overflow-y-auto space-y-2 p-1">
         {mensajes.length === 0 && (
-          <p className="text-center text-sm text-gray-400 mt-8">
-            Iniciá la conversación 👋
-          </p>
+          <p className="text-center text-sm text-gray-400 mt-8">Iniciá la conversación 👋</p>
         )}
         {mensajes.map((m) => {
           const mio = m.de === meId;
+          const borrado = m.eliminado_todos;
           return (
-            <div key={m.id} className={`flex ${mio ? "justify-end" : "justify-start"}`}>
+            <div key={m.id} className={`flex items-center gap-1 ${mio ? "justify-end" : "justify-start"}`}>
+              {mio && !borrado && (
+                <BotonMenu
+                  abierto={menuId === m.id}
+                  onToggle={() => setMenuId(menuId === m.id ? null : m.id)}
+                  mio={mio}
+                  onParaMi={() => eliminarParaMi(m.id)}
+                  onParaTodos={() => eliminarParaTodos(m.id)}
+                />
+              )}
               <div
                 className={`max-w-[78%] rounded-2xl px-3 py-2 shadow-sm ${
-                  mio ? "bg-cacao-grad text-white" : "bg-white border border-gray-200 text-gray-900"
+                  borrado
+                    ? "bg-gray-100 text-gray-500 italic"
+                    : mio
+                    ? "bg-cacao-grad text-white"
+                    : "bg-white border border-gray-200 text-gray-900"
                 }`}
               >
-                {m.imagen_url && (
-                  <a href={m.imagen_url} target="_blank" rel="noreferrer">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.imagen_url} alt="foto" className="rounded-lg max-h-64 mb-1" />
-                  </a>
+                {borrado ? (
+                  <p className="text-sm">🚫 Se eliminó este mensaje</p>
+                ) : (
+                  <>
+                    {m.imagen_url && (
+                      <a href={m.imagen_url} target="_blank" rel="noreferrer">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={m.imagen_url} alt="foto" className="rounded-lg max-h-64 mb-1" />
+                      </a>
+                    )}
+                    {m.texto && <p className="text-sm whitespace-pre-wrap break-words">{m.texto}</p>}
+                  </>
                 )}
-                {m.texto && <p className="text-sm whitespace-pre-wrap break-words">{m.texto}</p>}
-                <p className={`text-[10px] mt-1 ${mio ? "text-white/70" : "text-gray-400"}`}>
+                <p className={`text-[10px] mt-1 ${mio && !borrado ? "text-white/70" : "text-gray-400"}`}>
                   {fechaHora(m.creado_en)}
                 </p>
               </div>
+              {!mio && (
+                <BotonMenu
+                  abierto={menuId === m.id}
+                  onToggle={() => setMenuId(menuId === m.id ? null : m.id)}
+                  mio={mio}
+                  onParaMi={() => eliminarParaMi(m.id)}
+                  onParaTodos={() => eliminarParaTodos(m.id)}
+                />
+              )}
             </div>
           );
         })}
@@ -183,6 +236,43 @@ export function Conversacion({
           <Send size={18} />
         </button>
       </div>
+    </div>
+  );
+}
+
+function BotonMenu({
+  abierto,
+  onToggle,
+  mio,
+  onParaMi,
+  onParaTodos,
+}: {
+  abierto: boolean;
+  onToggle: () => void;
+  mio: boolean;
+  onParaMi: () => void;
+  onParaTodos: () => void;
+}) {
+  return (
+    <div className="relative shrink-0">
+      <button onClick={onToggle} className="text-gray-400 hover:text-gray-700 p-1" aria-label="Opciones del mensaje">
+        <MoreVertical size={16} />
+      </button>
+      {abierto && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={onToggle} />
+          <div className="absolute right-0 mt-1 z-20 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden min-w-[190px]">
+            <button onClick={onParaMi} className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">
+              Eliminar para mí
+            </button>
+            {mio && (
+              <button onClick={onParaTodos} className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50">
+                Eliminar para todos
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
