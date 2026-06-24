@@ -6,6 +6,7 @@ type Contacto = {
   id: string;
   nombre: string;
   rol: string;
+  avatar: string | null;
   no_leidos: number;
   ultimo: string | null;
   ultimo_en: string | null;
@@ -36,12 +37,17 @@ export default async function Chat() {
           {contactos.map((c) => (
             <li key={c.id}>
               <Link href={`/chat/${c.id}`} className="flex items-center gap-3 p-4 hover:bg-[#faf3e8]">
-                <span
-                  className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold shrink-0"
-                  style={{ backgroundImage: "linear-gradient(135deg,#8a5a2c,#e0a32e)" }}
-                >
-                  {(c.nombre || "?").charAt(0).toUpperCase()}
-                </span>
+                {c.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.avatar} alt="" className="w-11 h-11 rounded-full object-cover border border-gray-200 shrink-0" />
+                ) : (
+                  <span
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold shrink-0"
+                    style={{ backgroundImage: "linear-gradient(135deg,#8a5a2c,#e0a32e)" }}
+                  >
+                    {(c.nombre || "?").charAt(0).toUpperCase()}
+                  </span>
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-medium text-gray-900 truncate">

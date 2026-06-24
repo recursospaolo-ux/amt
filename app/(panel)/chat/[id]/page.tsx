@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Conversacion } from "./Conversacion";
 import { MenuConversacion } from "./MenuConversacion";
 
-type Contacto = { id: string; nombre: string; rol: string };
+type Contacto = { id: string; nombre: string; rol: string; avatar: string | null };
 
 export default async function ChatThread({
   params,
@@ -43,12 +43,17 @@ export default async function ChatThread({
         <Link href="/chat" className="text-gray-600 hover:text-[#8a5a2c]" aria-label="Volver">
           <ArrowLeft size={22} />
         </Link>
-        <span
-          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
-          style={{ backgroundImage: "linear-gradient(135deg,#8a5a2c,#e0a32e)" }}
-        >
-          {(otro.nombre || "?").charAt(0).toUpperCase()}
-        </span>
+        {otro.avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={otro.avatar} alt="" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+        ) : (
+          <span
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+            style={{ backgroundImage: "linear-gradient(135deg,#8a5a2c,#e0a32e)" }}
+          >
+            {(otro.nombre || "?").charAt(0).toUpperCase()}
+          </span>
+        )}
         <div className="flex-1">
           <div className="font-semibold text-gray-900 leading-tight">{otro.nombre}</div>
           <div className="text-xs text-gray-500">{otro.rol === "dueno" ? "Administrador" : "Equipo"}</div>

@@ -16,6 +16,7 @@ import {
   Briefcase,
   BarChart3,
   History,
+  UserCircle,
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -27,6 +28,7 @@ export function Sidebar({
   rol,
   permisos,
   chatUnread = 0,
+  avatarUrl,
   onNavigate,
 }: {
   nombre: string;
@@ -34,6 +36,7 @@ export function Sidebar({
   rol: string;
   permisos: Permisos;
   chatUnread?: number;
+  avatarUrl?: string | null;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
@@ -71,6 +74,8 @@ export function Sidebar({
       active: pathname.startsWith("/actividad") },
     { href: "/solicitudes", label: "Aprobar Usuarios", icon: UserCheck, show: esDueno,
       active: pathname.startsWith("/solicitudes") },
+    { href: "/mi-cuenta", label: "Mi cuenta", icon: UserCircle, show: true,
+      active: pathname.startsWith("/mi-cuenta") },
   ];
 
   async function salir() {
@@ -119,9 +124,24 @@ export function Sidebar({
       </nav>
 
       <div className="px-4 py-4 border-t border-gray-200">
-        <div className="text-sm font-medium text-gray-900">{nombre}</div>
-        <div className="text-xs text-gray-600 truncate">{correo}</div>
-        <span className="inline-block mt-1.5 text-[10px] uppercase tracking-wide bg-cacao-grad text-white rounded px-1.5 py-0.5">
+        <Link href="/mi-cuenta" onClick={onNavigate} className="flex items-center gap-3 group">
+          {avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarUrl} alt="foto" className="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0" />
+          ) : (
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shrink-0"
+              style={{ backgroundImage: "linear-gradient(135deg,#8a5a2c,#e0a32e)" }}
+            >
+              {(nombre || correo || "?").charAt(0).toUpperCase()}
+            </span>
+          )}
+          <div className="min-w-0">
+            <div className="text-sm font-medium text-gray-900 truncate group-hover:text-[#8a5a2c]">{nombre}</div>
+            <div className="text-xs text-gray-600 truncate">{correo}</div>
+          </div>
+        </Link>
+        <span className="inline-block mt-2 text-[10px] uppercase tracking-wide bg-cacao-grad text-white rounded px-1.5 py-0.5">
           {esDueno ? "Admin" : "Trabajador"}
         </span>
         <button

@@ -16,7 +16,7 @@ export default async function PanelLayout({
 
   const { data: perfil } = await supabase
     .from("usuarios")
-    .select("nombre, rol, estado, permisos")
+    .select("nombre, rol, estado, permisos, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -53,6 +53,7 @@ export default async function PanelLayout({
       permisos={perfil.permisos as Permisos}
       notifCount={notifCount}
       chatUnread={chatUnread ?? 0}
+      avatarUrl={perfil.avatar_url as string | null}
     >
       {children}
     </Shell>
