@@ -2,6 +2,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { soles } from "@/lib/format";
+
+type Resultado = { ok: true } | { ok: false; error: string };
 
 async function usuarioActual() {
   const supabase = await createClient();
@@ -25,16 +28,34 @@ export async function crearProductor(formData: FormData) {
   revalidatePath("/acopio");
 }
 
-export async function crearLote(formData: FormData) {
+export async function crearLote(formData: FormData): Promise<Resultado> {
   const { supabase, userId } = await usuarioActual();
   const peso = Number(formData.get("peso_kg"));
+  const precio = Number(formData.get("precio_kg"));
+  const monto = (peso || 0) * (precio || 0);
   const codigo = "L-" + Date.now().toString(36).toUpperCase();
+
+  // No se puede comprar si no hay saldo suficiente en caja
+  // (saldo actual menos los pagos que ya están pendientes).
+  const { data: saldo } = await supabase.rpc("saldo_caja");
+  const { data: pend } = await supabase
+    .from("lotes_acopio")
+    .select("monto_total")
+    .eq("pago_estado", "pendiente");
+  const comprometido = (pend ?? []).reduce((a, p) => a + Number(p.monto_total), 0);
+  const disponible = Number(saldo ?? 0) - comprometido;
+  if (monto > disponible) {
+    return {
+      ok: false,
+      error: `No hay saldo suficiente en caja. Disponible para pagar: ${soles(disponible)}, esta compra: ${soles(monto)}. Agregá saldo en "Dinero".`,
+    };
+  }
 
   // Proveedor: existente o nuevo (creado al vuelo).
   let productorId = String(formData.get("productor_id") || "").trim();
   if (!productorId) {
     const nuevoNombre = String(formData.get("nuevo_nombre") || "").trim();
-    if (!nuevoNombre) throw new Error("Indicá el proveedor (elegí uno o creá uno nuevo).");
+    if (!nuevoNombre) return { ok: false, error: "Indicá el proveedor (elegí uno o creá uno nuevo)." };
     const { data: np, error: ep } = await supabase
       .from("productores")
       .insert({
@@ -43,7 +64,7 @@ export async function crearLote(formData: FormData) {
       })
       .select("id")
       .single();
-    if (ep) throw new Error("No se pudo crear el proveedor: " + ep.message);
+    if (ep) return { ok: false, error: "No se pudo crear el proveedor: " + ep.message };
     productorId = np.id;
   }
 
@@ -55,13 +76,13 @@ export async function crearLote(formData: FormData) {
       estado_recepcion: String(formData.get("estado_recepcion")),
       peso_kg: peso,
       humedad: formData.get("humedad") ? Number(formData.get("humedad")) : null,
-      precio_kg: Number(formData.get("precio_kg")),
+      precio_kg: precio,
       estado: "recibido",
       creado_por: userId,
     })
     .select("id")
     .single();
-  if (error) throw new Error("No se pudo registrar el acopio: " + error.message);
+  if (error) return { ok: false, error: "No se pudo registrar la compra: " + error.message };
 
   await supabase.from("procesos_lote").insert({
     lote_id: data.id,
@@ -71,7 +92,8 @@ export async function crearLote(formData: FormData) {
   });
 
   revalidatePath("/acopio");
-  redirect(`/acopio/${data.id}`);
+  revalidatePath("/pagos");
+  return { ok: true };
 }
 
 export async function registrarEtapa(

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { soles, kg, fechaHora } from "@/lib/format";
-import { crearLote, eliminarLote } from "./acciones";
+import { eliminarLote } from "./acciones";
 import { Eliminar } from "../_components/eliminar";
-import { SelectorProductor } from "./SelectorProductor";
+import { NuevaCompra } from "./NuevaCompra";
 import { esDueno } from "@/lib/auth/esDueno";
 
 export default async function Acopio() {
@@ -44,38 +44,10 @@ export default async function Acopio() {
       <section className="bg-white border border-gray-200 rounded-2xl p-4">
         <h2 className="font-medium mb-1">Nueva compra de cacao</h2>
         <p className="text-xs text-gray-600 mb-3">
-          El monto se descuenta automáticamente de la caja.
+          Queda <b>pendiente de pago</b>: el cajero la confirma y recién ahí se
+          descuenta de la caja. Necesita saldo suficiente en caja.
         </p>
-        <form action={crearLote} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label className="text-sm sm:col-span-2">
-              Proveedor
-              <SelectorProductor productores={productores ?? []} />
-            </label>
-            <label className="text-sm">
-              Estado de recepción
-              <select name="estado_recepcion" required className="w-full border rounded p-2 mt-1">
-                <option value="baba">En baba (fresco)</option>
-                <option value="seco">Seco</option>
-              </select>
-            </label>
-            <label className="text-sm">
-              Peso (kg)
-              <input name="peso_kg" type="number" step="0.01" min="0.01" required className="w-full border rounded p-2 mt-1" />
-            </label>
-            <label className="text-sm">
-              Humedad (%) <span className="text-gray-400">(opcional)</span>
-              <input name="humedad" type="number" step="0.1" min="0" className="w-full border rounded p-2 mt-1" />
-            </label>
-            <label className="text-sm">
-              Precio por kg (S/)
-              <input name="precio_kg" type="number" step="0.01" min="0" required className="w-full border rounded p-2 mt-1" />
-            </label>
-            <div className="flex items-end">
-              <button className="bg-cacao-grad text-white rounded-full px-5 py-2.5 font-semibold shadow-md w-full">
-                Registrar compra
-              </button>
-            </div>
-        </form>
+        <NuevaCompra productores={productores ?? []} />
       </section>
 
       <section>

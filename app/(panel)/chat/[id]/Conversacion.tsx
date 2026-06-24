@@ -153,7 +153,6 @@ export function Conversacion({
           <input
             type="file"
             accept="image/*"
-            capture="environment"
             className="hidden"
             disabled={subiendo}
             onChange={(e) => {
